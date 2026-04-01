@@ -1,0 +1,33 @@
+{
+  "name": "@feelback/cli",
+  "version": "0.1.0",
+  "description": "Developer CLI for Feelback haptic engine — preview, test, and validate patterns",
+  "type": "module",
+  "bin": {
+    "feelback": "./dist/index.js"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@feelback/core": "workspace:*"
+  },
+  "keywords": [
+    "haptics",
+    "cli",
+    "developer-tools",
+    "vibration"
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^25.5.0"
+  }
+}
