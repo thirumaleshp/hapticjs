@@ -1,4 +1,4 @@
-import type { SemanticEffect } from '@feelback/core';
+import type { SemanticEffect } from '@vibejs/core';
 import { useHaptic } from '../hooks/use-haptic';
 
 export interface HapticButtonProps

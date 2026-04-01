@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { visualize, summarize } from '../src/utils/visualizer';
-import type { HapticStep } from '@feelback/core';
+import type { HapticStep } from '@vibejs/core';
 
 describe('Visualizer', () => {
   it('handles empty pattern', () => {

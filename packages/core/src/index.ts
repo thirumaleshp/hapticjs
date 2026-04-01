@@ -49,7 +49,7 @@ import { HapticEngine } from './engine';
  * Pre-configured haptic engine singleton.
  * Import and use directly for quick haptic feedback:
  *
- *   import { haptic } from '@feelback/core';
+ *   import { haptic } from '@vibejs/core';
  *   haptic.tap();
  *   haptic.success();
  *   haptic.play('~~..##..@@');

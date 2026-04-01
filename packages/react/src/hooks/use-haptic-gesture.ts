@@ -1,5 +1,5 @@
 import { useCallback, useRef } from 'react';
-import type { SemanticEffect } from '@feelback/core';
+import type { SemanticEffect } from '@vibejs/core';
 import { useHapticEngine } from '../context/haptic-provider';
 
 export interface HapticGestureConfig {

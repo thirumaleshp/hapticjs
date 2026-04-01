@@ -8,5 +8,5 @@ export default defineConfig({
   sourcemap: true,
   treeshake: true,
   splitting: false,
-  external: ['@feelback/core'],
+  external: ['@vibejs/core'],
 });

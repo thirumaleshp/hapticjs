@@ -1,5 +1,5 @@
 {
-  "name": "feelback",
+  "name": "vibejs",
   "private": true,
   "description": "Universal Haptics Engine for JavaScript/TypeScript",
   "scripts": {

@@ -1,6 +1,6 @@
 import type { App, InjectionKey } from 'vue';
-import { HapticEngine } from '@feelback/core';
-import type { HapticConfig } from '@feelback/core';
+import { HapticEngine } from '@vibejs/core';
+import type { HapticConfig } from '@vibejs/core';
 import { vHaptic } from './directives/v-haptic';
 
 export const HAPTIC_ENGINE_KEY: InjectionKey<HapticEngine> = Symbol('feelback-engine');
@@ -16,7 +16,7 @@ export interface FeelbackPluginOptions {
  * Vue plugin for Feelback haptic engine.
  *
  * Usage:
- *   import { FeelbackPlugin } from '@feelback/vue';
+ *   import { FeelbackPlugin } from '@vibejs/vue';
  *   app.use(FeelbackPlugin, { config: { intensity: 0.8 } });
  */
 export const FeelbackPlugin = {

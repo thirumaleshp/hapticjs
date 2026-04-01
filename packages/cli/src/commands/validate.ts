@@ -1,4 +1,4 @@
-import { validateHPL, parseHPL, compile } from '@feelback/core';
+import { validateHPL, parseHPL, compile } from '@vibejs/core';
 import { summarize } from '../utils/visualizer';
 
 export function validate(pattern: string): string {

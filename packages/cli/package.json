@@ -1,5 +1,5 @@
 {
-  "name": "@feelback/cli",
+  "name": "@vibejs/cli",
   "version": "0.1.0",
   "description": "Developer CLI for Feelback haptic engine — preview, test, and validate patterns",
   "type": "module",
@@ -18,7 +18,7 @@
     "clean": "rm -rf dist"
   },
   "dependencies": {
-    "@feelback/core": "workspace:*"
+    "@vibejs/core": "workspace:*"
   },
   "keywords": [
     "haptics",

@@ -1,6 +1,6 @@
 import { createContext, useContext, useMemo } from 'react';
-import { HapticEngine } from '@feelback/core';
-import type { HapticConfig } from '@feelback/core';
+import { HapticEngine } from '@vibejs/core';
+import type { HapticConfig } from '@vibejs/core';
 
 export interface HapticContextValue {
   engine: HapticEngine;

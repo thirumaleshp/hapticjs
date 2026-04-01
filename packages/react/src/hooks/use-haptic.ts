@@ -1,5 +1,5 @@
 import { useCallback, useMemo } from 'react';
-import type { HapticPattern, HapticStep, SemanticEffect } from '@feelback/core';
+import type { HapticPattern, HapticStep, SemanticEffect } from '@vibejs/core';
 import { useHapticEngine } from '../context/haptic-provider';
 
 export interface UseHapticReturn {

@@ -1,4 +1,4 @@
-import { presets } from '@feelback/core';
+import { presets } from '@vibejs/core';
 import { summarize } from '../utils/visualizer';
 
 export function list(category?: string): string {
