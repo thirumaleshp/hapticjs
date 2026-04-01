@@ -1,5 +1,5 @@
 {
-  "name": "@vibejs/vue",
+  "name": "@hapticjs/vue",
   "version": "0.1.0",
   "description": "Vue composables and directives for Feelback haptic engine",
   "type": "module",
@@ -22,17 +22,17 @@
   "sideEffects": false,
   "scripts": {
     "build": "tsup",
-    "test": "vitest run",
+    "test": "vitest run --passWithNoTests",
     "typecheck": "tsc --noEmit",
     "clean": "rm -rf dist"
   },
   "peerDependencies": {
     "vue": ">=3.3.0",
-    "@vibejs/core": "workspace:*"
+    "@hapticjs/core": "workspace:*"
   },
   "devDependencies": {
     "vue": "^3.5.0",
-    "@vibejs/core": "workspace:*"
+    "@hapticjs/core": "workspace:*"
   },
   "keywords": ["haptics", "vue", "composables", "directives", "vibration"],
   "license": "MIT"

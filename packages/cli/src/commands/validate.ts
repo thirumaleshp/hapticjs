@@ -1,4 +1,4 @@
-import { validateHPL, parseHPL, compile } from '@vibejs/core';
+import { validateHPL, parseHPL, compile } from '@hapticjs/core';
 import { summarize } from '../utils/visualizer';
 
 export function validate(pattern: string): string {

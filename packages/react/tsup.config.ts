@@ -8,5 +8,5 @@ export default defineConfig({
   sourcemap: true,
   treeshake: true,
   splitting: false,
-  external: ['react', '@vibejs/core'],
+  external: ['react', '@hapticjs/core'],
 });

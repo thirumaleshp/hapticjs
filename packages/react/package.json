@@ -1,5 +1,5 @@
 {
-  "name": "@vibejs/react",
+  "name": "@hapticjs/react",
   "version": "0.1.0",
   "description": "React hooks and components for Feelback haptic engine",
   "type": "module",
@@ -22,19 +22,19 @@
   "sideEffects": false,
   "scripts": {
     "build": "tsup",
-    "test": "vitest run",
+    "test": "vitest run --passWithNoTests",
     "test:watch": "vitest",
     "typecheck": "tsc --noEmit",
     "clean": "rm -rf dist"
   },
   "peerDependencies": {
     "react": ">=17.0.0",
-    "@vibejs/core": "workspace:*"
+    "@hapticjs/core": "workspace:*"
   },
   "devDependencies": {
     "react": "^19.0.0",
     "@types/react": "^19.0.0",
-    "@vibejs/core": "workspace:*"
+    "@hapticjs/core": "workspace:*"
   },
   "keywords": [
     "haptics",

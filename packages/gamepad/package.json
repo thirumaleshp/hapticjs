@@ -1,5 +1,5 @@
 {
-  "name": "@vibejs/gamepad",
+  "name": "@hapticjs/gamepad",
   "version": "0.1.0",
   "description": "Gamepad haptics adapter for Feelback — dual motor support",
   "type": "module",
@@ -27,10 +27,10 @@
     "clean": "rm -rf dist"
   },
   "peerDependencies": {
-    "@vibejs/core": "workspace:*"
+    "@hapticjs/core": "workspace:*"
   },
   "devDependencies": {
-    "@vibejs/core": "workspace:*"
+    "@hapticjs/core": "workspace:*"
   },
   "keywords": ["haptics", "gamepad", "controller", "vibration", "rumble", "dual-motor"],
   "license": "MIT"

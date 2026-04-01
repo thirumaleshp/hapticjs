@@ -1,5 +1,5 @@
 {
-  "name": "@vibejs/svelte",
+  "name": "@hapticjs/svelte",
   "version": "0.1.0",
   "description": "Svelte actions and stores for Feelback haptic engine",
   "type": "module",
@@ -28,11 +28,11 @@
   },
   "peerDependencies": {
     "svelte": ">=4.0.0",
-    "@vibejs/core": "workspace:*"
+    "@hapticjs/core": "workspace:*"
   },
   "devDependencies": {
     "svelte": "^5.0.0",
-    "@vibejs/core": "workspace:*"
+    "@hapticjs/core": "workspace:*"
   },
   "keywords": ["haptics", "svelte", "actions", "vibration"],
   "license": "MIT"

@@ -1,5 +1,5 @@
 {
-  "name": "@vibejs/core",
+  "name": "@hapticjs/core",
   "version": "0.1.0",
   "description": "Universal Haptics Engine — feel the web",
   "type": "module",

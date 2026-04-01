@@ -1,5 +1,5 @@
-import { HapticEngine } from '@vibejs/core';
-import type { HapticConfig, HapticPattern, HapticStep } from '@vibejs/core';
+import { HapticEngine } from '@hapticjs/core';
+import type { HapticConfig, HapticPattern, HapticStep } from '@hapticjs/core';
 
 export interface HapticStore {
   engine: HapticEngine;
@@ -26,7 +26,7 @@ export interface HapticStore {
  *
  * Or in a Svelte component:
  *   <script>
- *     import { createHapticStore } from '@vibejs/svelte';
+ *     import { createHapticStore } from '@hapticjs/svelte';
  *     const haptic = createHapticStore();
  *   </script>
  *   <button on:click={() => haptic.tap()}>Click</button>

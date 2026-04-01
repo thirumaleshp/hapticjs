@@ -8,5 +8,5 @@ export default defineConfig({
   sourcemap: true,
   treeshake: true,
   splitting: false,
-  external: ['svelte', 'svelte/store', '@vibejs/core'],
+  external: ['svelte', 'svelte/store', '@hapticjs/core'],
 });

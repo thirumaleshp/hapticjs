@@ -1,5 +1,5 @@
-import { HapticEngine } from '@vibejs/core';
-import type { SemanticEffect } from '@vibejs/core';
+import { HapticEngine } from '@hapticjs/core';
+import type { SemanticEffect } from '@hapticjs/core';
 
 type HapticActionParam = SemanticEffect | string;
 

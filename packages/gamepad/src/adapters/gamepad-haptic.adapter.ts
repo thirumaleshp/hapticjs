@@ -1,4 +1,4 @@
-import type { HapticAdapter, AdapterCapabilities, HapticStep } from '@vibejs/core';
+import type { HapticAdapter, AdapterCapabilities, HapticStep } from '@hapticjs/core';
 import { GamepadManager } from '../utils/gamepad-manager';
 import { defaultMotorMapping } from '../utils/dual-motor';
 import type { MotorMappingFn } from '../utils/dual-motor';

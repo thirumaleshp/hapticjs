@@ -1,6 +1,6 @@
 import type { Directive, DirectiveBinding } from 'vue';
-import { HapticEngine } from '@vibejs/core';
-import type { SemanticEffect } from '@vibejs/core';
+import { HapticEngine } from '@hapticjs/core';
+import type { SemanticEffect } from '@hapticjs/core';
 
 type HapticDirectiveValue = SemanticEffect | string;
 

@@ -29,7 +29,7 @@ importers:
 
   packages/cli:
     dependencies:
-      '@vibejs/core':
+      '@hapticjs/core':
         specifier: workspace:*
         version: link:../core
     devDependencies:
@@ -41,25 +41,25 @@ importers:
 
   packages/gamepad:
     devDependencies:
-      '@vibejs/core':
+      '@hapticjs/core':
         specifier: workspace:*
         version: link:../core
 
   packages/react:
     devDependencies:
+      '@hapticjs/core':
+        specifier: workspace:*
+        version: link:../core
       '@types/react':
         specifier: ^19.0.0
         version: 19.2.14
-      '@vibejs/core':
-        specifier: workspace:*
-        version: link:../core
       react:
         specifier: ^19.0.0
         version: 19.2.4
 
   packages/svelte:
     devDependencies:
-      '@vibejs/core':
+      '@hapticjs/core':
         specifier: workspace:*
         version: link:../core
       svelte:
@@ -68,7 +68,7 @@ importers:
 
   packages/vue:
     devDependencies:
-      '@vibejs/core':
+      '@hapticjs/core':
         specifier: workspace:*
         version: link:../core
       vue:

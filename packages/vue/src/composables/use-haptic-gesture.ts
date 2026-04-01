@@ -1,6 +1,6 @@
 import { inject, onUnmounted } from 'vue';
-import { HapticEngine } from '@vibejs/core';
-import type { SemanticEffect } from '@vibejs/core';
+import { HapticEngine } from '@hapticjs/core';
+import type { SemanticEffect } from '@hapticjs/core';
 import { HAPTIC_ENGINE_KEY } from '../plugin';
 
 export interface HapticGestureConfig {

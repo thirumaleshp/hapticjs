@@ -1,4 +1,4 @@
-import type { HapticStep } from '@vibejs/core';
+import type { HapticStep } from '@hapticjs/core';
 
 const BLOCK_CHARS = [' ', '▁', '▂', '▃', '▄', '▅', '▆', '▇', '█'];
 
