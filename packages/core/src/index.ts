@@ -22,7 +22,7 @@ export { HapticEngine } from './engine';
 export { AdaptiveEngine, FallbackManager, detectAdapter } from './engine';
 
 // Adapters
-export { NoopAdapter, WebVibrationAdapter } from './adapters';
+export { NoopAdapter, WebVibrationAdapter, IoSAudioAdapter } from './adapters';
 
 // Patterns
 export { parseHPL, HPLParser, HPLParserError } from './patterns';
@@ -30,6 +30,15 @@ export { compile, optimizeSteps } from './patterns';
 export { tokenize, HPLTokenizerError } from './patterns';
 export { validateHPL } from './patterns';
 export type { ValidationResult } from './patterns';
+export {
+  exportPattern,
+  importPattern,
+  patternToJSON,
+  patternFromJSON,
+  patternToDataURL,
+  patternFromDataURL,
+} from './patterns';
+export type { HapticPatternExport, ExportOptions } from './patterns';
 
 // Composer
 export { PatternComposer } from './composer';
