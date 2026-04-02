@@ -1,0 +1,42 @@
+{
+  "name": "@hapticjs/web-components",
+  "version": "0.1.0",
+  "description": "Framework-agnostic custom elements for Haptic.js haptic engine",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    }
+  },
+  "files": ["dist", "README.md"],
+  "sideEffects": true,
+  "scripts": {
+    "build": "tsup",
+    "test": "vitest run --passWithNoTests",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@hapticjs/core": "workspace:*"
+  },
+  "keywords": [
+    "haptics",
+    "web-components",
+    "custom-elements",
+    "vibration",
+    "haptic-feedback"
+  ],
+  "repository": {"type": "git", "url": "https://github.com/thirumaleshp/Feelback.git"},
+  "license": "MIT"
+}

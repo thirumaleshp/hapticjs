@@ -2,6 +2,9 @@
 export { GamepadHapticAdapter } from './adapters/gamepad-haptic.adapter';
 export type { GamepadAdapterOptions } from './adapters/gamepad-haptic.adapter';
 
+// Spatial
+export { SpatialHaptics } from './spatial/spatial-haptics';
+
 // Utilities
 export { GamepadManager } from './utils/gamepad-manager';
 export {

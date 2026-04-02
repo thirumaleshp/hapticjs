@@ -97,6 +97,37 @@ export type {
 export { ThemeManager, themes } from './themes';
 export type { ThemePreset } from './themes';
 
+// Middleware
+export {
+  MiddlewareManager,
+  intensityScaler,
+  durationScaler,
+  intensityClamper,
+  patternRepeater,
+  reverser,
+  accessibilityBooster,
+} from './middleware';
+export type { HapticMiddleware } from './middleware';
+
+// Profiles
+export { ProfileManager, profiles } from './profiles';
+export type { IntensityProfile } from './profiles';
+
+// Experiment
+export { HapticExperiment } from './experiment';
+
+// Rhythm
+export { RhythmSync } from './rhythm';
+export type { RhythmSyncOptions } from './rhythm';
+
+// Motion
+export { MotionDetector } from './motion';
+export type { MotionDetectorOptions } from './motion';
+
+// Accessibility
+export { HapticA11y } from './accessibility';
+export type { HapticA11yOptions } from './accessibility';
+
 // Utils
 export { detectPlatform } from './utils';
 export type { PlatformInfo } from './utils';
