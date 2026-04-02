@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+  <meta name="description" content="Interactive playground for @hapticjs — the universal haptics engine for JavaScript. Try haptic patterns live on your device." />
+  <meta name="theme-color" content="#0f0f1a" />
+  <title>@hapticjs Playground — Universal Haptics Engine</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🫨</text></svg>" />
+  <style>
+    /* ── Reset & Base ─────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0f0f1a;
+      --bg-surface: #1a1a2e;
+      --bg-elevated: #222240;
+      --bg-hover: #2a2a4a;
+      --text: #e8e8f0;
+      --text-muted: #8888a8;
+      --text-dim: #5a5a78;
+      --accent: #6366f1;
+      --accent-glow: rgba(99, 102, 241, 0.25);
+      --accent-hover: #818cf8;
+      --success: #34d399;
+      --warning: #fbbf24;
+      --error: #f87171;
+      --border: #2a2a45;
+      --radius: 12px;
+      --radius-sm: 8px;
+      --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --font-mono: 'SF Mono', 'Cascadia Code', 'Fira Code', 'JetBrains Mono', monospace;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Layout ───────────────────────────────────────────── */
+    .container {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    section {
+      padding: 48px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    section:last-of-type { border-bottom: none; }
+
+    .section-title {
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: var(--text);
+    }
+
+    .section-subtitle {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      margin-bottom: 28px;
+    }
+
+    /* ── Header ───────────────────────────────────────────── */
+    .hero {
+      text-align: center;
+      padding: 64px 0 48px;
+    }
+
+    .hero-logo {
+      font-size: 2.8rem;
+      font-weight: 800;
+      letter-spacing: -1px;
+      background: linear-gradient(135deg, #6366f1 0%, #a78bfa 50%, #6366f1 100%);
+      background-size: 200% 200%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: shimmer 4s ease-in-out infinite;
+    }
+
+    @keyframes shimmer {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+
+    .hero-tagline {
+      font-size: 1.15rem;
+      color: var(--text-muted);
+      margin-top: 8px;
+      font-weight: 400;
+    }
+
+    .hero-install {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 24px;
+      padding: 12px 20px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      font-family: var(--font-mono);
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    .hero-install code {
+      color: var(--text);
+      font-family: inherit;
+    }
+
+    .copy-btn {
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      padding: 4px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.8rem;
+      font-family: var(--font);
+      transition: all 0.2s;
+    }
+
+    .copy-btn:hover { color: var(--text); border-color: var(--accent); }
+    .copy-btn.copied { color: var(--success); border-color: var(--success); }
+
+    .hero-links {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      margin-top: 20px;
+    }
+
+    .hero-link {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.9rem;
+      padding: 8px 16px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      transition: all 0.2s;
+    }
+
+    .hero-link:hover {
+      color: var(--text);
+      border-color: var(--accent);
+      background: var(--accent-glow);
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 20px;
+      padding: 8px 16px;
+      background: var(--bg-surface);
+      border-radius: 20px;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      border: 1px solid var(--border);
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--error);
+    }
+
+    .status-dot.supported { background: var(--success); }
+
+    /* ── Button Grid ──────────────────────────────────────── */
+    .btn-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+      gap: 10px;
+    }
+
+    .haptic-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      padding: 16px 12px;
+      min-height: 52px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--text);
+      font-family: var(--font);
+      font-size: 0.88rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: manipulation;
+    }
+
+    .haptic-btn:hover {
+      background: var(--bg-hover);
+      border-color: var(--accent);
+      transform: translateY(-1px);
+    }
+
+    .haptic-btn:active {
+      transform: scale(0.95);
+      background: var(--accent-glow);
+      border-color: var(--accent);
+    }
+
+    .haptic-btn .btn-label {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      font-weight: 400;
+    }
+
+    /* ── HPL Editor ───────────────────────────────────────── */
+    .editor-area {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .hpl-input {
+      flex: 1;
+      padding: 14px 16px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--text);
+      font-family: var(--font-mono);
+      font-size: 1.1rem;
+      letter-spacing: 2px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .hpl-input::placeholder {
+      color: var(--text-dim);
+      letter-spacing: 1px;
+    }
+
+    .hpl-input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-glow);
+    }
+
+    .play-btn {
+      padding: 14px 24px;
+      background: var(--accent);
+      border: none;
+      border-radius: var(--radius);
+      color: white;
+      font-family: var(--font);
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      white-space: nowrap;
+    }
+
+    .play-btn:hover { background: var(--accent-hover); }
+    .play-btn:active { transform: scale(0.96); }
+    .play-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .viz-box {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      min-height: 60px;
+      margin-bottom: 16px;
+      overflow-x: auto;
+    }
+
+    .viz-bars {
+      font-size: 1.5rem;
+      letter-spacing: 1px;
+      line-height: 1;
+      color: var(--accent-hover);
+      margin-bottom: 8px;
+      min-height: 1.6em;
+    }
+
+    .viz-stats {
+      color: var(--text-muted);
+      font-size: 0.8rem;
+    }
+
+    .viz-error {
+      color: var(--error);
+      font-size: 0.85rem;
+    }
+
+    .example-btns {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+
+    .example-btn {
+      padding: 8px 14px;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      color: var(--text-muted);
+      font-family: var(--font);
+      font-size: 0.82rem;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .example-btn:hover {
+      color: var(--text);
+      border-color: var(--accent);
+      background: var(--accent-glow);
+    }
+
+    /* ── Syntax Reference ─────────────────────────────────── */
+    .syntax-ref {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 8px;
+      margin-top: 16px;
+    }
+
+    .syntax-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      background: var(--bg-surface);
+      border-radius: var(--radius-sm);
+      font-size: 0.85rem;
+    }
+
+    .syntax-char {
+      font-family: var(--font-mono);
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--accent-hover);
+      min-width: 24px;
+      text-align: center;
+    }
+
+    .syntax-desc {
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      line-height: 1.3;
+    }
+
+    /* ── Preset Tabs ──────────────────────────────────────── */
+    .tab-bar {
+      display: flex;
+      gap: 4px;
+      margin-bottom: 16px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      padding-bottom: 4px;
+    }
+
+    .tab-bar::-webkit-scrollbar { display: none; }
+
+    .tab-btn {
+      padding: 10px 18px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--text-muted);
+      font-family: var(--font);
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s;
+      white-space: nowrap;
+    }
+
+    .tab-btn:hover { color: var(--text); border-color: var(--accent); }
+
+    .tab-btn.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: white;
+    }
+
+    .preset-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 10px;
+    }
+
+    .preset-btn {
+      padding: 14px 12px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--text);
+      font-family: var(--font);
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      text-align: center;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: manipulation;
+    }
+
+    .preset-btn:hover {
+      background: var(--bg-hover);
+      border-color: var(--accent);
+      transform: translateY(-1px);
+    }
+
+    .preset-btn:active {
+      transform: scale(0.95);
+      background: var(--accent-glow);
+      border-color: var(--accent);
+    }
+
+    .preset-viz {
+      margin-top: 16px;
+    }
+
+    /* ── Composer ──────────────────────────────────────────── */
+    .composer-controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .composer-add-btn {
+      padding: 10px 16px;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--text);
+      font-family: var(--font);
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .composer-add-btn:hover {
+      border-color: var(--accent);
+      background: var(--accent-glow);
+    }
+
+    .composer-add-btn:active { transform: scale(0.95); }
+
+    .composer-steps {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      min-height: 48px;
+      padding: 16px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      margin-bottom: 12px;
+      align-items: center;
+    }
+
+    .composer-step {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-family: var(--font-mono);
+      font-weight: 500;
+    }
+
+    .composer-step.vibrate {
+      background: rgba(99, 102, 241, 0.2);
+      color: var(--accent-hover);
+      border: 1px solid rgba(99, 102, 241, 0.3);
+    }
+
+    .composer-step.pause {
+      background: rgba(136, 136, 168, 0.1);
+      color: var(--text-muted);
+      border: 1px solid rgba(136, 136, 168, 0.2);
+    }
+
+    .composer-step .remove-step {
+      background: none;
+      border: none;
+      color: inherit;
+      cursor: pointer;
+      opacity: 0.5;
+      font-size: 0.9rem;
+      padding: 0 2px;
+      line-height: 1;
+    }
+
+    .composer-step .remove-step:hover { opacity: 1; }
+
+    .composer-empty {
+      color: var(--text-dim);
+      font-size: 0.85rem;
+      font-style: italic;
+    }
+
+    .composer-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .clear-btn {
+      padding: 12px 20px;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--text-muted);
+      font-family: var(--font);
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .clear-btn:hover { color: var(--text); border-color: var(--error); }
+
+    /* ── Footer ───────────────────────────────────────────── */
+    footer {
+      padding: 40px 0;
+      text-align: center;
+      border-top: 1px solid var(--border);
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+      margin-bottom: 16px;
+    }
+
+    .footer-link {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.85rem;
+      transition: color 0.2s;
+    }
+
+    .footer-link:hover { color: var(--accent-hover); }
+
+    .footer-branding {
+      color: var(--text-dim);
+      font-size: 0.82rem;
+    }
+
+    .footer-branding span {
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    /* ── Responsive ───────────────────────────────────────── */
+    @media (max-width: 600px) {
+      .hero { padding: 40px 0 32px; }
+      .hero-logo { font-size: 2rem; }
+      .hero-tagline { font-size: 1rem; }
+      .hero-install { flex-direction: column; gap: 8px; padding: 10px 16px; }
+      section { padding: 32px 0; }
+      .section-title { font-size: 1.2rem; }
+      .btn-grid { grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); }
+      .preset-grid { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); }
+      .editor-area { flex-direction: column; }
+      .play-btn { width: 100%; }
+      .syntax-ref { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
+    }
+
+    /* ── Animations ───────────────────────────────────────── */
+    @keyframes pulse-ring {
+      0% { box-shadow: 0 0 0 0 var(--accent-glow); }
+      70% { box-shadow: 0 0 0 8px rgba(99, 102, 241, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0); }
+    }
+
+    .haptic-btn.playing, .preset-btn.playing {
+      animation: pulse-ring 0.4s ease-out;
+      border-color: var(--accent);
+    }
+
+    @keyframes fade-in {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    section {
+      animation: fade-in 0.5s ease-out;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <!-- ═══ Hero ═══ -->
+    <header class="hero">
+      <div class="hero-logo">@hapticjs</div>
+      <p class="hero-tagline">Universal Haptics Engine for JavaScript</p>
+
+      <div class="hero-install">
+        <code>npm install @hapticjs/core</code>
+        <button class="copy-btn" id="copyInstall">Copy</button>
+      </div>
+
+      <div class="hero-links">
+        <a class="hero-link" href="https://github.com/thirumaleshp/Feelback" target="_blank" rel="noopener">GitHub</a>
+        <a class="hero-link" href="https://www.npmjs.com/package/@hapticjs/core" target="_blank" rel="noopener">npm</a>
+      </div>
+
+      <div class="status-badge">
+        <span class="status-dot" id="statusDot"></span>
+        <span id="statusText">Detecting haptics...</span>
+      </div>
+    </header>
+
+    <!-- ═══ Try It — Semantic Effects ═══ -->
+    <section>
+      <h2 class="section-title">Try It</h2>
+      <p class="section-subtitle">Tap any button to feel the haptic effect on your device.</p>
+
+      <div class="btn-grid" id="semanticGrid">
+        <button class="haptic-btn" data-effect="tap">
+          tap()
+          <span class="btn-label">Light touch</span>
+        </button>
+        <button class="haptic-btn" data-effect="doubleTap">
+          doubleTap()
+          <span class="btn-label">Double pulse</span>
+        </button>
+        <button class="haptic-btn" data-effect="longPress">
+          longPress()
+          <span class="btn-label">Firm hold</span>
+        </button>
+        <button class="haptic-btn" data-effect="success">
+          success()
+          <span class="btn-label">Ascending</span>
+        </button>
+        <button class="haptic-btn" data-effect="warning">
+          warning()
+          <span class="btn-label">Triple pulse</span>
+        </button>
+        <button class="haptic-btn" data-effect="error">
+          error()
+          <span class="btn-label">Heavy double</span>
+        </button>
+        <button class="haptic-btn" data-effect="selection">
+          selection()
+          <span class="btn-label">Subtle tick</span>
+        </button>
+        <button class="haptic-btn" data-effect="impact-light">
+          impact('light')
+          <span class="btn-label">Soft</span>
+        </button>
+        <button class="haptic-btn" data-effect="impact-medium">
+          impact('medium')
+          <span class="btn-label">Medium</span>
+        </button>
+        <button class="haptic-btn" data-effect="impact-heavy">
+          impact('heavy')
+          <span class="btn-label">Strong</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- ═══ HPL Pattern Editor ═══ -->
+    <section>
+      <h2 class="section-title">HPL Pattern Editor</h2>
+      <p class="section-subtitle">Write Haptic Pattern Language strings and play them live.</p>
+
+      <div class="example-btns" id="exampleBtns">
+        <button class="example-btn" data-pattern="##..@@..##..@@">Heartbeat</button>
+        <button class="example-btn" data-pattern="[@@@@@@....]x3...[@@@@@@....]x3...[@@@@@@....]x3">SOS</button>
+        <button class="example-btn" data-pattern="[|.]x12">Drum Roll</button>
+        <button class="example-btn" data-pattern="[@@..@@..]x4">Alarm</button>
+        <button class="example-btn" data-pattern="~.~.#.#.~.~.">Gentle Wave</button>
+      </div>
+
+      <div class="editor-area">
+        <input
+          type="text"
+          class="hpl-input"
+          id="hplInput"
+          placeholder="~~..##..@@"
+          autocomplete="off"
+          autocorrect="off"
+          autocapitalize="off"
+          spellcheck="false"
+        />
+        <button class="play-btn" id="playHpl">Play</button>
+      </div>
+
+      <div class="viz-box" id="vizBox">
+        <div class="viz-bars" id="vizBars"></div>
+        <div class="viz-stats" id="vizStats"></div>
+      </div>
+
+      <details>
+        <summary style="color: var(--text-muted); cursor: pointer; font-size: 0.9rem; margin-bottom: 12px;">HPL Syntax Reference</summary>
+        <div class="syntax-ref">
+          <div class="syntax-item">
+            <span class="syntax-char">~</span>
+            <span class="syntax-desc">Light vibration<br/>50ms @ 30%</span>
+          </div>
+          <div class="syntax-item">
+            <span class="syntax-char">#</span>
+            <span class="syntax-desc">Medium vibration<br/>50ms @ 60%</span>
+          </div>
+          <div class="syntax-item">
+            <span class="syntax-char">@</span>
+            <span class="syntax-desc">Heavy vibration<br/>50ms @ 100%</span>
+          </div>
+          <div class="syntax-item">
+            <span class="syntax-char">.</span>
+            <span class="syntax-desc">Pause<br/>50ms silence</span>
+          </div>
+          <div class="syntax-item">
+            <span class="syntax-char">|</span>
+            <span class="syntax-desc">Sharp tap<br/>10ms @ 100%</span>
+          </div>
+          <div class="syntax-item">
+            <span class="syntax-char">-</span>
+            <span class="syntax-desc">Sustain<br/>Extend previous 50ms</span>
+          </div>
+          <div class="syntax-item">
+            <span class="syntax-char">[&thinsp;]</span>
+            <span class="syntax-desc">Group<br/>Wrap a sequence</span>
+          </div>
+          <div class="syntax-item">
+            <span class="syntax-char">xN</span>
+            <span class="syntax-desc">Repeat<br/>Repeat group N times</span>
+          </div>
+        </div>
+      </details>
+    </section>
+
+    <!-- ═══ Presets Explorer ═══ -->
+    <section>
+      <h2 class="section-title">Presets Explorer</h2>
+      <p class="section-subtitle">43 built-in haptic patterns across 5 categories.</p>
+
+      <div class="tab-bar" id="tabBar">
+        <button class="tab-btn active" data-category="ui">UI</button>
+        <button class="tab-btn" data-category="notifications">Notifications</button>
+        <button class="tab-btn" data-category="gaming">Gaming</button>
+        <button class="tab-btn" data-category="accessibility">Accessibility</button>
+        <button class="tab-btn" data-category="system">System</button>
+      </div>
+
+      <div class="preset-grid" id="presetGrid"></div>
+
+      <div class="viz-box preset-viz" id="presetViz" style="display: none;">
+        <div class="viz-bars" id="presetVizBars"></div>
+        <div class="viz-stats" id="presetVizStats"></div>
+      </div>
+    </section>
+
+    <!-- ═══ Composer ═══ -->
+    <section>
+      <h2 class="section-title">Composer</h2>
+      <p class="section-subtitle">Build haptic patterns step by step.</p>
+
+      <div class="composer-controls" id="composerControls">
+        <button class="composer-add-btn" data-add="tap">+ Tap</button>
+        <button class="composer-add-btn" data-add="buzz">+ Buzz</button>
+        <button class="composer-add-btn" data-add="pause">+ Pause</button>
+        <button class="composer-add-btn" data-add="ramp">+ Ramp</button>
+        <button class="composer-add-btn" data-add="pulse">+ Pulse</button>
+      </div>
+
+      <div class="composer-steps" id="composerSteps">
+        <span class="composer-empty">Add steps above to build a pattern</span>
+      </div>
+
+      <div class="composer-actions">
+        <button class="play-btn" id="playComposer">Play</button>
+        <button class="clear-btn" id="clearComposer">Clear</button>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- ═══ Footer ═══ -->
+  <footer>
+    <div class="container">
+      <div class="footer-links">
+        <a class="footer-link" href="https://github.com/thirumaleshp/Feelback" target="_blank" rel="noopener">GitHub</a>
+        <a class="footer-link" href="https://www.npmjs.com/package/@hapticjs/core" target="_blank" rel="noopener">npm</a>
+        <a class="footer-link" href="https://github.com/thirumaleshp/Feelback/blob/main/LICENSE" target="_blank" rel="noopener">MIT License</a>
+      </div>
+      <p class="footer-branding">Built with <span>@hapticjs</span></p>
+    </div>
+  </footer>
+
+  <script type="module" src="/src/main.ts"></script>
+</body>
+</html>
