@@ -1,12 +1,14 @@
-<p align="center">
-  <h1 align="center">@hapticjs</h1>
-  <p align="center">Universal Haptics Engine for JavaScript & TypeScript</p>
-  <p align="center">
-    <a href="https://www.npmjs.com/org/hapticjs"><img src="https://img.shields.io/npm/v/@hapticjs/core?label=core&color=blue" alt="npm"></a>
-    <a href="https://github.com/thirumaleshp/Feelback/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-green" alt="license"></a>
-    <img src="https://img.shields.io/badge/bundle-<3KB-brightgreen" alt="bundle size">
-  </p>
-</p>
+<div align="center">
+
+# @hapticjs
+
+**Universal Haptics Engine for JavaScript & TypeScript**
+
+[![npm](https://img.shields.io/npm/v/@hapticjs/core?label=core&color=blue)](https://www.npmjs.com/org/hapticjs)
+[![license](https://img.shields.io/badge/license-MIT-green)](https://github.com/thirumaleshp/hapticjs/blob/main/LICENSE)
+![bundle size](https://img.shields.io/badge/bundle-<3KB-brightgreen)
+
+</div>
 
 ---
 
