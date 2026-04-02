@@ -5,16 +5,16 @@ export const ui = {
   /** Light button tap */
   tap: {
     name: 'ui.tap',
-    steps: [{ type: 'vibrate' as const, duration: 10, intensity: 0.6 }],
+    steps: [{ type: 'vibrate' as const, duration: 30, intensity: 0.6 }],
   },
 
   /** Double tap */
   doubleTap: {
     name: 'ui.doubleTap',
     steps: [
-      { type: 'vibrate' as const, duration: 10, intensity: 0.6 },
+      { type: 'vibrate' as const, duration: 25, intensity: 0.6 },
       { type: 'pause' as const, duration: 80, intensity: 0 },
-      { type: 'vibrate' as const, duration: 10, intensity: 0.6 },
+      { type: 'vibrate' as const, duration: 25, intensity: 0.6 },
     ],
   },
 
@@ -27,34 +27,34 @@ export const ui = {
   /** Toggle switch on */
   toggleOn: {
     name: 'ui.toggleOn',
-    steps: [{ type: 'vibrate' as const, duration: 15, intensity: 0.6 }],
+    steps: [{ type: 'vibrate' as const, duration: 30, intensity: 0.6 }],
   },
 
   /** Toggle switch off */
   toggleOff: {
     name: 'ui.toggleOff',
-    steps: [{ type: 'vibrate' as const, duration: 10, intensity: 0.3 }],
+    steps: [{ type: 'vibrate' as const, duration: 25, intensity: 0.4 }],
   },
 
   /** Slider snap to value */
   sliderSnap: {
     name: 'ui.sliderSnap',
-    steps: [{ type: 'vibrate' as const, duration: 5, intensity: 0.4 }],
+    steps: [{ type: 'vibrate' as const, duration: 25, intensity: 0.5 }],
   },
 
   /** Selection changed */
   selection: {
     name: 'ui.selection',
-    steps: [{ type: 'vibrate' as const, duration: 8, intensity: 0.4 }],
+    steps: [{ type: 'vibrate' as const, duration: 25, intensity: 0.5 }],
   },
 
   /** Pull to refresh threshold reached */
   pullToRefresh: {
     name: 'ui.pullToRefresh',
     steps: [
-      { type: 'vibrate' as const, duration: 20, intensity: 0.5 },
+      { type: 'vibrate' as const, duration: 30, intensity: 0.5 },
       { type: 'pause' as const, duration: 40, intensity: 0 },
-      { type: 'vibrate' as const, duration: 30, intensity: 0.7 },
+      { type: 'vibrate' as const, duration: 40, intensity: 0.7 },
     ],
   },
 
@@ -62,31 +62,31 @@ export const ui = {
   swipe: {
     name: 'ui.swipe',
     steps: [
-      { type: 'vibrate' as const, duration: 12, intensity: 0.4 },
+      { type: 'vibrate' as const, duration: 30, intensity: 0.5 },
       { type: 'pause' as const, duration: 30, intensity: 0 },
-      { type: 'vibrate' as const, duration: 8, intensity: 0.3 },
+      { type: 'vibrate' as const, duration: 25, intensity: 0.4 },
     ],
   },
 
   /** Context menu appearance */
   contextMenu: {
     name: 'ui.contextMenu',
-    steps: [{ type: 'vibrate' as const, duration: 20, intensity: 0.7 }],
+    steps: [{ type: 'vibrate' as const, duration: 35, intensity: 0.7 }],
   },
 
   /** Drag start */
   dragStart: {
     name: 'ui.dragStart',
-    steps: [{ type: 'vibrate' as const, duration: 12, intensity: 0.5 }],
+    steps: [{ type: 'vibrate' as const, duration: 30, intensity: 0.5 }],
   },
 
   /** Drag drop */
   drop: {
     name: 'ui.drop',
     steps: [
-      { type: 'vibrate' as const, duration: 20, intensity: 0.8 },
+      { type: 'vibrate' as const, duration: 30, intensity: 0.8 },
       { type: 'pause' as const, duration: 30, intensity: 0 },
-      { type: 'vibrate' as const, duration: 10, intensity: 0.4 },
+      { type: 'vibrate' as const, duration: 25, intensity: 0.5 },
     ],
   },
 } satisfies Record<string, HapticPattern>;

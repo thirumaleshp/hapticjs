@@ -6,9 +6,9 @@ export const accessibility = {
   confirm: {
     name: 'accessibility.confirm',
     steps: [
-      { type: 'vibrate' as const, duration: 30, intensity: 0.7 },
+      { type: 'vibrate' as const, duration: 35, intensity: 0.7 },
       { type: 'pause' as const, duration: 100, intensity: 0 },
-      { type: 'vibrate' as const, duration: 30, intensity: 0.7 },
+      { type: 'vibrate' as const, duration: 35, intensity: 0.7 },
     ],
   },
 
@@ -24,7 +24,7 @@ export const accessibility = {
   boundary: {
     name: 'accessibility.boundary',
     steps: [
-      { type: 'vibrate' as const, duration: 15, intensity: 1.0 },
+      { type: 'vibrate' as const, duration: 30, intensity: 1.0 },
     ],
   },
 
@@ -32,7 +32,7 @@ export const accessibility = {
   focusChange: {
     name: 'accessibility.focusChange',
     steps: [
-      { type: 'vibrate' as const, duration: 5, intensity: 0.3 },
+      { type: 'vibrate' as const, duration: 25, intensity: 0.5 },
     ],
   },
 
@@ -40,7 +40,7 @@ export const accessibility = {
   countTick: {
     name: 'accessibility.countTick',
     steps: [
-      { type: 'vibrate' as const, duration: 8, intensity: 0.5 },
+      { type: 'vibrate' as const, duration: 25, intensity: 0.5 },
     ],
   },
 
@@ -48,11 +48,11 @@ export const accessibility = {
   landmark: {
     name: 'accessibility.landmark',
     steps: [
-      { type: 'vibrate' as const, duration: 15, intensity: 0.6 },
+      { type: 'vibrate' as const, duration: 25, intensity: 0.6 },
       { type: 'pause' as const, duration: 40, intensity: 0 },
-      { type: 'vibrate' as const, duration: 15, intensity: 0.6 },
+      { type: 'vibrate' as const, duration: 25, intensity: 0.6 },
       { type: 'pause' as const, duration: 40, intensity: 0 },
-      { type: 'vibrate' as const, duration: 15, intensity: 0.6 },
+      { type: 'vibrate' as const, duration: 25, intensity: 0.6 },
     ],
   },
 
@@ -60,9 +60,9 @@ export const accessibility = {
   progressCheckpoint: {
     name: 'accessibility.progressCheckpoint',
     steps: [
-      { type: 'vibrate' as const, duration: 20, intensity: 0.4 },
+      { type: 'vibrate' as const, duration: 30, intensity: 0.5 },
       { type: 'pause' as const, duration: 60, intensity: 0 },
-      { type: 'vibrate' as const, duration: 25, intensity: 0.7 },
+      { type: 'vibrate' as const, duration: 35, intensity: 0.7 },
     ],
   },
 } satisfies Record<string, HapticPattern>;

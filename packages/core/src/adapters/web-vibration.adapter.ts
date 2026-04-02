@@ -1,16 +1,14 @@
 import type { HapticAdapter, AdapterCapabilities, HapticStep } from '../types';
-import { delay } from '../utils/scheduling';
 
 /**
  * Web Vibration API adapter.
  * Uses navigator.vibrate() — supported on Android browsers.
- * Intensity is simulated via PWM (rapid on/off) since the API only supports on/off.
+ * Android Vibration API is on/off only — no intensity control.
+ * We ignore intensity and just vibrate for the requested duration.
  */
 export class WebVibrationAdapter implements HapticAdapter {
   readonly name = 'web-vibration';
   readonly supported: boolean;
-
-  private _cancelled = false;
 
   constructor() {
     this.supported =
@@ -19,8 +17,8 @@ export class WebVibrationAdapter implements HapticAdapter {
 
   capabilities(): AdapterCapabilities {
     return {
-      maxIntensityLevels: 1, // on/off only
-      minDuration: 10,
+      maxIntensityLevels: 1,
+      minDuration: 20,
       maxDuration: 10000,
       supportsPattern: true,
       supportsIntensity: false,
@@ -30,47 +28,51 @@ export class WebVibrationAdapter implements HapticAdapter {
 
   async pulse(_intensity: number, duration: number): Promise<void> {
     if (!this.supported) return;
-    navigator.vibrate(duration);
+    navigator.vibrate(Math.max(duration, 20));
   }
 
   async playSequence(steps: HapticStep[]): Promise<void> {
     if (!this.supported || steps.length === 0) return;
 
-    this._cancelled = false;
+    // Build native vibration pattern: [vibrate, pause, vibrate, pause, ...]
+    // Merge consecutive vibrate steps and enforce minimum durations
+    const pattern: number[] = [];
+    let lastType: 'vibrate' | 'pause' | null = null;
 
-    // Convert to Vibration API pattern: [vibrate, pause, vibrate, pause, ...]
-    const pattern = this._toVibrationPattern(steps);
-
-    // If it's a simple pattern, use native pattern support
-    if (this._canUseNativePattern(steps)) {
-      navigator.vibrate(pattern);
-      return;
+    for (const step of steps) {
+      if (step.type === 'vibrate' && step.intensity > 0.05) {
+        const dur = Math.max(step.duration, 20);
+        if (lastType === 'vibrate') {
+          // Merge consecutive vibrations
+          pattern[pattern.length - 1]! += dur;
+        } else {
+          pattern.push(dur);
+        }
+        lastType = 'vibrate';
+      } else {
+        const dur = Math.max(step.duration, 10);
+        if (lastType === 'pause') {
+          pattern[pattern.length - 1]! += dur;
+        } else {
+          pattern.push(dur);
+        }
+        lastType = 'pause';
+      }
     }
 
-    // For complex patterns (intensity variation), play step by step
-    for (const step of steps) {
-      if (this._cancelled) break;
-
-      if (step.type === 'vibrate') {
-        if (step.intensity > 0.1) {
-          // Simulate intensity via PWM for lower intensities
-          if (step.intensity < 0.5) {
-            await this._pwmVibrate(step.duration, step.intensity);
-          } else {
-            navigator.vibrate(step.duration);
-            await delay(step.duration);
-          }
-        } else {
-          await delay(step.duration);
-        }
-      } else {
-        await delay(step.duration);
+    if (pattern.length > 0) {
+      // If pattern starts with a pause, the first value is a wait
+      // navigator.vibrate expects [vibrate, pause, vibrate, pause, ...]
+      // If first step was a pause, prepend a 0ms vibrate
+      if (steps[0]?.type === 'pause' || (steps[0]?.type === 'vibrate' && steps[0]?.intensity <= 0.05)) {
+        pattern.unshift(0);
       }
+
+      navigator.vibrate(pattern);
     }
   }
 
   cancel(): void {
-    this._cancelled = true;
     if (this.supported) {
       navigator.vibrate(0);
     }
@@ -78,41 +80,5 @@ export class WebVibrationAdapter implements HapticAdapter {
 
   dispose(): void {
     this.cancel();
-  }
-
-  /** Convert steps to Vibration API pattern array */
-  private _toVibrationPattern(steps: HapticStep[]): number[] {
-    const pattern: number[] = [];
-    for (const step of steps) {
-      pattern.push(step.duration);
-    }
-    return pattern;
-  }
-
-  /** Check if all steps can be played with native pattern (no intensity variation) */
-  private _canUseNativePattern(steps: HapticStep[]): boolean {
-    return steps.every(
-      (s) =>
-        (s.type === 'pause') ||
-        (s.type === 'vibrate' && s.intensity >= 0.5)
-    );
-  }
-
-  /** Simulate lower intensity via pulse-width modulation */
-  private async _pwmVibrate(duration: number, intensity: number): Promise<void> {
-    const cycleTime = 20; // ms per PWM cycle
-    const onTime = Math.round(cycleTime * intensity);
-    const offTime = cycleTime - onTime;
-    const cycles = Math.floor(duration / cycleTime);
-
-    const pattern: number[] = [];
-    for (let i = 0; i < cycles; i++) {
-      pattern.push(onTime, offTime);
-    }
-
-    if (pattern.length > 0) {
-      navigator.vibrate(pattern);
-      await delay(duration);
-    }
   }
 }

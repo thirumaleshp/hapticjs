@@ -5,21 +5,21 @@ export const system = {
   /** Keyboard key press */
   keyPress: {
     name: 'system.keyPress',
-    steps: [{ type: 'vibrate' as const, duration: 5, intensity: 0.3 }],
+    steps: [{ type: 'vibrate' as const, duration: 25, intensity: 0.5 }],
   },
 
   /** Scroll tick (detent-like) */
   scrollTick: {
     name: 'system.scrollTick',
-    steps: [{ type: 'vibrate' as const, duration: 3, intensity: 0.2 }],
+    steps: [{ type: 'vibrate' as const, duration: 20, intensity: 0.4 }],
   },
 
   /** Scroll boundary reached */
   scrollBounce: {
     name: 'system.scrollBounce',
     steps: [
-      { type: 'vibrate' as const, duration: 10, intensity: 0.5 },
-      { type: 'vibrate' as const, duration: 20, intensity: 0.3 },
+      { type: 'vibrate' as const, duration: 25, intensity: 0.6 },
+      { type: 'vibrate' as const, duration: 30, intensity: 0.4 },
     ],
   },
 
@@ -27,9 +27,9 @@ export const system = {
   delete: {
     name: 'system.delete',
     steps: [
-      { type: 'vibrate' as const, duration: 15, intensity: 0.5 },
+      { type: 'vibrate' as const, duration: 30, intensity: 0.5 },
       { type: 'pause' as const, duration: 50, intensity: 0 },
-      { type: 'vibrate' as const, duration: 25, intensity: 0.8 },
+      { type: 'vibrate' as const, duration: 40, intensity: 0.8 },
     ],
   },
 
@@ -37,25 +37,25 @@ export const system = {
   undo: {
     name: 'system.undo',
     steps: [
-      { type: 'vibrate' as const, duration: 20, intensity: 0.5 },
+      { type: 'vibrate' as const, duration: 30, intensity: 0.5 },
       { type: 'pause' as const, duration: 80, intensity: 0 },
-      { type: 'vibrate' as const, duration: 10, intensity: 0.3 },
+      { type: 'vibrate' as const, duration: 25, intensity: 0.4 },
     ],
   },
 
   /** Copy to clipboard */
   copy: {
     name: 'system.copy',
-    steps: [{ type: 'vibrate' as const, duration: 12, intensity: 0.4 }],
+    steps: [{ type: 'vibrate' as const, duration: 30, intensity: 0.5 }],
   },
 
   /** Paste from clipboard */
   paste: {
     name: 'system.paste',
     steps: [
-      { type: 'vibrate' as const, duration: 8, intensity: 0.3 },
+      { type: 'vibrate' as const, duration: 25, intensity: 0.4 },
       { type: 'pause' as const, duration: 30, intensity: 0 },
-      { type: 'vibrate' as const, duration: 12, intensity: 0.5 },
+      { type: 'vibrate' as const, duration: 30, intensity: 0.6 },
     ],
   },
 } satisfies Record<string, HapticPattern>;

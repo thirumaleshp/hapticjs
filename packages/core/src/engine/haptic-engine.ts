@@ -51,9 +51,9 @@ export class HapticEngine {
   /** Double tap */
   async doubleTap(intensity = 0.6): Promise<void> {
     await this._playSteps([
-      { type: 'vibrate', duration: 10, intensity },
+      { type: 'vibrate', duration: 25, intensity },
       { type: 'pause', duration: 80, intensity: 0 },
-      { type: 'vibrate', duration: 10, intensity },
+      { type: 'vibrate', duration: 25, intensity },
     ]);
   }
 
@@ -93,26 +93,26 @@ export class HapticEngine {
 
   /** Selection change feedback */
   async selection(): Promise<void> {
-    await this._playSteps([{ type: 'vibrate', duration: 8, intensity: 0.4 }]);
+    await this._playSteps([{ type: 'vibrate', duration: 25, intensity: 0.5 }]);
   }
 
   /** Toggle feedback */
   async toggle(on: boolean): Promise<void> {
     if (on) {
-      await this._playSteps([{ type: 'vibrate', duration: 15, intensity: 0.6 }]);
+      await this._playSteps([{ type: 'vibrate', duration: 30, intensity: 0.6 }]);
     } else {
-      await this._playSteps([{ type: 'vibrate', duration: 10, intensity: 0.3 }]);
+      await this._playSteps([{ type: 'vibrate', duration: 25, intensity: 0.4 }]);
     }
   }
 
   /** Impact with style (matches iOS UIImpactFeedbackGenerator) */
   async impact(style: ImpactStyle = 'medium'): Promise<void> {
     const presets: Record<ImpactStyle, HapticStep[]> = {
-      light: [{ type: 'vibrate', duration: 10, intensity: 0.3 }],
-      medium: [{ type: 'vibrate', duration: 15, intensity: 0.6 }],
-      heavy: [{ type: 'vibrate', duration: 25, intensity: 1.0 }],
-      rigid: [{ type: 'vibrate', duration: 8, intensity: 0.9 }],
-      soft: [{ type: 'vibrate', duration: 30, intensity: 0.4 }],
+      light: [{ type: 'vibrate', duration: 25, intensity: 0.4 }],
+      medium: [{ type: 'vibrate', duration: 35, intensity: 0.7 }],
+      heavy: [{ type: 'vibrate', duration: 50, intensity: 1.0 }],
+      rigid: [{ type: 'vibrate', duration: 30, intensity: 0.9 }],
+      soft: [{ type: 'vibrate', duration: 35, intensity: 0.5 }],
     };
     await this._playSteps(presets[style]);
   }

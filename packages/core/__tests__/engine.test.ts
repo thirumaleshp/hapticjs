@@ -47,8 +47,8 @@ describe('HapticEngine', () => {
 
     it('selection() produces a very short subtle pulse', async () => {
       await engine.selection();
-      expect(mock.history[0]!.duration).toBeLessThanOrEqual(10);
-      expect(mock.history[0]!.intensity).toBeLessThan(0.5);
+      expect(mock.history[0]!.duration).toBeLessThanOrEqual(50);
+      expect(mock.history[0]!.intensity).toBeLessThanOrEqual(0.5);
     });
 
     it('impact() with different styles varies intensity', async () => {
