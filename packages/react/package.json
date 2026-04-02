@@ -1,6 +1,6 @@
 {
   "name": "@hapticjs/react",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "React hooks and components for Feelback haptic engine",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -18,7 +18,7 @@
       }
     }
   },
-  "files": ["dist"],
+  "files": ["dist", "README.md"],
   "sideEffects": false,
   "scripts": {
     "build": "tsup",
@@ -43,5 +43,6 @@
     "vibration",
     "haptic-feedback"
   ],
+  "repository": {"type": "git", "url": "https://github.com/thirumaleshp/Feelback.git"},
   "license": "MIT"
 }

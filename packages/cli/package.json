@@ -1,6 +1,6 @@
 {
   "name": "@hapticjs/cli",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Developer CLI for Feelback haptic engine — preview, test, and validate patterns",
   "type": "module",
   "bin": {
@@ -26,6 +26,7 @@
     "developer-tools",
     "vibration"
   ],
+  "repository": {"type": "git", "url": "https://github.com/thirumaleshp/Feelback.git"},
   "license": "MIT",
   "devDependencies": {
     "@types/node": "^25.5.0"

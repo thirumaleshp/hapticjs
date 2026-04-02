@@ -1,6 +1,6 @@
 {
   "name": "@hapticjs/core",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Universal Haptics Engine — feel the web",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -28,7 +28,7 @@
       }
     }
   },
-  "files": ["dist"],
+  "files": ["dist", "README.md"],
   "sideEffects": false,
   "scripts": {
     "build": "tsup",

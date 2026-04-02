@@ -45,7 +45,7 @@ export class HapticEngine {
 
   /** Light tap feedback */
   async tap(intensity = 0.6): Promise<void> {
-    await this._playSteps([{ type: 'vibrate', duration: 10, intensity }]);
+    await this._playSteps([{ type: 'vibrate', duration: 30, intensity }]);
   }
 
   /** Double tap */

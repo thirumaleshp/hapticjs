@@ -16,7 +16,7 @@ describe('HapticEngine', () => {
       await engine.tap();
       expect(mock.history.length).toBeGreaterThan(0);
       expect(mock.history[0]!.type).toBe('vibrate');
-      expect(mock.history[0]!.duration).toBeLessThanOrEqual(20);
+      expect(mock.history[0]!.duration).toBeLessThanOrEqual(50);
     });
 
     it('doubleTap() produces two vibrations with a pause', async () => {
