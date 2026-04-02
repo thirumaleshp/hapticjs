@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Haptic Form | @hapticjs/core</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: #f4f5f9;
+    color: #1a1a2e;
+    min-height: 100vh;
+  }
+
+  /* ─── Header ───────────────────────────────── */
+  .top-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.8rem 1.2rem;
+    background: #fff;
+    border-bottom: 1px solid #e2e4ea;
+  }
+  .top-bar a {
+    color: #6b7280;
+    text-decoration: none;
+    font-size: 0.85rem;
+  }
+  .top-bar a:hover { color: #4f46e5; }
+  .top-bar h1 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #4f46e5;
+  }
+
+  /* ─── Layout ───────────────────────────────── */
+  .container {
+    max-width: 520px;
+    margin: 0 auto;
+    padding: 1.5rem;
+  }
+
+  .card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 8px 24px rgba(0,0,0,0.04);
+    margin-bottom: 1.5rem;
+  }
+
+  .card-title {
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 0.3rem;
+    color: #111;
+  }
+  .card-subtitle {
+    font-size: 0.85rem;
+    color: #888;
+    margin-bottom: 1.5rem;
+  }
+
+  /* ─── Profile selector ─────────────────────── */
+  .profile-bar {
+    display: flex;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+    margin-bottom: 1.5rem;
+  }
+  .profile-chip {
+    padding: 0.35rem 0.9rem;
+    font-size: 0.8rem;
+    border-radius: 20px;
+    border: 1px solid #d1d5e0;
+    background: #f8f8fc;
+    color: #555;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-weight: 500;
+  }
+  .profile-chip.active {
+    background: #4f46e5;
+    color: #fff;
+    border-color: #4f46e5;
+  }
+  .profile-chip:hover:not(.active) {
+    border-color: #4f46e5;
+    color: #4f46e5;
+  }
+
+  /* ─── Form fields ──────────────────────────── */
+  .field {
+    margin-bottom: 1.2rem;
+    position: relative;
+  }
+  .field label {
+    display: block;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: #444;
+    margin-bottom: 0.35rem;
+  }
+
+  .input-wrap {
+    position: relative;
+  }
+  .input-wrap input,
+  .input-wrap select {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    border: 2px solid #e2e4ea;
+    border-radius: 10px;
+    background: #fafbfe;
+    color: #111;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    font-family: inherit;
+  }
+  .input-wrap input:focus,
+  .input-wrap select:focus {
+    border-color: #4f46e5;
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+  }
+
+  .input-wrap input.valid {
+    border-color: #10b981;
+  }
+  .input-wrap input.invalid {
+    border-color: #ef4444;
+  }
+
+  .field-msg {
+    font-size: 0.75rem;
+    margin-top: 0.3rem;
+    min-height: 1rem;
+    transition: color 0.2s;
+  }
+  .field-msg.error { color: #ef4444; }
+  .field-msg.success { color: #10b981; }
+
+  .status-icon {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.1rem;
+    pointer-events: none;
+  }
+
+  /* ─── Toggle switch ────────────────────────── */
+  .toggle-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.6rem 0;
+  }
+  .toggle-row label {
+    font-size: 0.9rem;
+    color: #444;
+    cursor: pointer;
+  }
+  .toggle-switch {
+    position: relative;
+    width: 48px;
+    height: 28px;
+    cursor: pointer;
+  }
+  .toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+    position: absolute;
+  }
+  .toggle-track {
+    position: absolute;
+    inset: 0;
+    background: #d1d5e0;
+    border-radius: 14px;
+    transition: background 0.2s;
+  }
+  .toggle-switch input:checked + .toggle-track {
+    background: #4f46e5;
+  }
+  .toggle-knob {
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 22px;
+    height: 22px;
+    background: #fff;
+    border-radius: 50%;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+    transition: transform 0.2s;
+  }
+  .toggle-switch input:checked ~ .toggle-knob {
+    transform: translateX(20px);
+  }
+
+  /* ─── Slider ───────────────────────────────── */
+  .slider-row {
+    margin-bottom: 1.2rem;
+  }
+  .slider-row label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: #444;
+    margin-bottom: 0.4rem;
+  }
+  .slider-row label span {
+    font-weight: 400;
+    color: #888;
+  }
+  input[type="range"] {
+    width: 100%;
+    height: 6px;
+    -webkit-appearance: none;
+    appearance: none;
+    background: #e2e4ea;
+    border-radius: 3px;
+    outline: none;
+    cursor: pointer;
+  }
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 22px;
+    height: 22px;
+    background: #4f46e5;
+    border-radius: 50%;
+    box-shadow: 0 1px 4px rgba(79, 70, 229, 0.3);
+  }
+  .slider-snaps {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.7rem;
+    color: #aaa;
+    margin-top: 0.3rem;
+    padding: 0 2px;
+  }
+
+  /* ─── Submit button ────────────────────────── */
+  .submit-btn {
+    width: 100%;
+    padding: 0.9rem;
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: #fff;
+    background: linear-gradient(135deg, #4f46e5, #7c3aed);
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s;
+    margin-top: 0.5rem;
+  }
+  .submit-btn:hover {
+    transform: scale(1.02);
+    box-shadow: 0 4px 20px rgba(79, 70, 229, 0.3);
+  }
+  .submit-btn:active { transform: scale(0.98); }
+  .submit-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+  }
+
+  /* ─── Success screen ───────────────────────── */
+  .success-screen {
+    text-align: center;
+    padding: 2rem 0;
+    display: none;
+  }
+  .success-screen.show { display: block; }
+  .success-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+  }
+  .success-screen h2 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    color: #10b981;
+  }
+  .success-screen p {
+    color: #888;
+    margin-bottom: 1.5rem;
+  }
+  .reset-btn {
+    padding: 0.7rem 2rem;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: #4f46e5;
+    background: #eef2ff;
+    border: 1px solid #c7d2fe;
+    border-radius: 10px;
+    cursor: pointer;
+  }
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  <a href="../index.html">&larr; Examples</a>
+  <h1>Haptic Form</h1>
+  <span style="width:80px"></span>
+</div>
+
+<div class="container">
+
+  <!-- Profile selector -->
+  <div class="card">
+    <div class="card-title">Feedback Intensity</div>
+    <div class="card-subtitle">Choose how strong the haptic and sound feedback feels.</div>
+    <div class="profile-bar" id="profileBar">
+      <button class="profile-chip" data-profile="off">Off</button>
+      <button class="profile-chip" data-profile="subtle">Subtle</button>
+      <button class="profile-chip active" data-profile="normal">Normal</button>
+      <button class="profile-chip" data-profile="strong">Strong</button>
+      <button class="profile-chip" data-profile="intense">Intense</button>
+    </div>
+  </div>
+
+  <!-- Form -->
+  <div class="card" id="formCard">
+    <div class="card-title">Create Account</div>
+    <div class="card-subtitle">Every field gives you tactile feedback in real time.</div>
+
+    <form id="signupForm" novalidate autocomplete="off">
+
+      <!-- Name -->
+      <div class="field">
+        <label for="name">Full Name</label>
+        <div class="input-wrap">
+          <input type="text" id="name" placeholder="Jane Doe" data-validate="name">
+          <span class="status-icon" id="nameIcon"></span>
+        </div>
+        <div class="field-msg" id="nameMsg"></div>
+      </div>
+
+      <!-- Email -->
+      <div class="field">
+        <label for="email">Email Address</label>
+        <div class="input-wrap">
+          <input type="email" id="email" placeholder="jane@example.com" data-validate="email">
+          <span class="status-icon" id="emailIcon"></span>
+        </div>
+        <div class="field-msg" id="emailMsg"></div>
+      </div>
+
+      <!-- Password -->
+      <div class="field">
+        <label for="password">Password</label>
+        <div class="input-wrap">
+          <input type="password" id="password" placeholder="8+ characters" data-validate="password">
+          <span class="status-icon" id="passwordIcon"></span>
+        </div>
+        <div class="field-msg" id="passwordMsg"></div>
+      </div>
+
+      <!-- Plan selector -->
+      <div class="field">
+        <label for="plan">Plan</label>
+        <div class="input-wrap">
+          <select id="plan">
+            <option value="free">Free</option>
+            <option value="pro">Pro ($9/mo)</option>
+            <option value="team">Team ($29/mo)</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Slider: notification frequency -->
+      <div class="slider-row">
+        <label>Notification Frequency <span id="freqValue">3</span></label>
+        <input type="range" id="freqSlider" min="1" max="5" step="1" value="3">
+        <div class="slider-snaps">
+          <span>Rare</span><span>Low</span><span>Normal</span><span>High</span><span>All</span>
+        </div>
+      </div>
+
+      <!-- Toggles -->
+      <div class="toggle-row">
+        <label for="toggleEmail">Email notifications</label>
+        <div class="toggle-switch">
+          <input type="checkbox" id="toggleEmail" checked>
+          <div class="toggle-track"></div>
+          <div class="toggle-knob"></div>
+        </div>
+      </div>
+
+      <div class="toggle-row">
+        <label for="toggleSMS">SMS notifications</label>
+        <div class="toggle-switch">
+          <input type="checkbox" id="toggleSMS">
+          <div class="toggle-track"></div>
+          <div class="toggle-knob"></div>
+        </div>
+      </div>
+
+      <div class="toggle-row" style="margin-bottom:1rem;">
+        <label for="toggleTerms">I agree to the terms</label>
+        <div class="toggle-switch">
+          <input type="checkbox" id="toggleTerms">
+          <div class="toggle-track"></div>
+          <div class="toggle-knob"></div>
+        </div>
+      </div>
+
+      <button type="submit" class="submit-btn" id="submitBtn">Create Account</button>
+    </form>
+
+    <!-- Success -->
+    <div class="success-screen" id="successScreen">
+      <div class="success-icon">&#10003;</div>
+      <h2>Account Created!</h2>
+      <p>You felt every step along the way.</p>
+      <button class="reset-btn" id="resetBtn">Start Over</button>
+    </div>
+  </div>
+
+</div>
+
+<script type="module">
+import {
+  HapticEngine,
+  SoundEngine,
+  VisualEngine,
+  ProfileManager,
+  profiles,
+} from '../../packages/core/dist/index.js';
+
+// ─── Engines ────────────────────────────────
+const haptic = HapticEngine.create();
+const sound = new SoundEngine({ volume: 0.3 });
+const visual = new VisualEngine({ enabled: true });
+const profileMgr = new ProfileManager();
+
+let currentProfile = profiles.normal;
+
+function applyProfile(name) {
+  profileMgr.setProfile(name);
+  currentProfile = profileMgr.getProfile();
+
+  // Scale haptic intensity
+  haptic.configure({ intensity: currentProfile.hapticScale });
+  sound.setVolume(currentProfile.soundVolume);
+
+  if (!currentProfile.soundEnabled) {
+    sound.mute();
+  } else {
+    sound.unmute();
+  }
+}
+
+// ─── Profile chips ──────────────────────────
+const profileBar = document.getElementById('profileBar');
+profileBar.addEventListener('click', (e) => {
+  const chip = e.target.closest('.profile-chip');
+  if (!chip) return;
+
+  profileBar.querySelectorAll('.profile-chip').forEach(c => c.classList.remove('active'));
+  chip.classList.add('active');
+
+  const name = chip.dataset.profile;
+  applyProfile(name);
+
+  haptic.tap();
+  sound.click({ pitch: 'mid' });
+});
+
+// ─── Field focus (selection haptic) ─────────
+document.querySelectorAll('input[data-validate], select').forEach(input => {
+  input.addEventListener('focus', () => {
+    haptic.selection();
+    sound.tick();
+  });
+});
+
+// ─── Validation rules ───────────────────────
+const validators = {
+  name: (v) => {
+    if (!v.trim()) return { valid: false, msg: '' };
+    if (v.trim().length < 2) return { valid: false, msg: 'Name too short' };
+    return { valid: true, msg: 'Looks good' };
+  },
+  email: (v) => {
+    if (!v.trim()) return { valid: false, msg: '' };
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) return { valid: false, msg: 'Enter a valid email' };
+    return { valid: true, msg: 'Valid email' };
+  },
+  password: (v) => {
+    if (!v) return { valid: false, msg: '' };
+    if (v.length < 8) return { valid: false, msg: 'At least 8 characters' };
+    if (!/[A-Z]/.test(v)) return { valid: false, msg: 'Add an uppercase letter' };
+    if (!/[0-9]/.test(v)) return { valid: false, msg: 'Add a number' };
+    return { valid: true, msg: 'Strong password' };
+  },
+};
+
+// Track per-field previous validity to only fire haptics on transitions
+const prevValidity = {};
+
+document.querySelectorAll('input[data-validate]').forEach(input => {
+  const fieldName = input.dataset.validate;
+  const msgEl = document.getElementById(fieldName + 'Msg');
+  const iconEl = document.getElementById(fieldName + 'Icon');
+
+  input.addEventListener('input', () => {
+    const result = validators[fieldName](input.value);
+
+    if (!input.value.trim()) {
+      input.classList.remove('valid', 'invalid');
+      msgEl.textContent = '';
+      msgEl.className = 'field-msg';
+      iconEl.textContent = '';
+      prevValidity[fieldName] = undefined;
+      return;
+    }
+
+    if (result.valid) {
+      input.classList.remove('invalid');
+      input.classList.add('valid');
+      msgEl.textContent = result.msg;
+      msgEl.className = 'field-msg success';
+      iconEl.textContent = '\u2713';
+      iconEl.style.color = '#10b981';
+
+      if (prevValidity[fieldName] !== true) {
+        haptic.success();
+        sound.success();
+      }
+    } else {
+      input.classList.remove('valid');
+      input.classList.add('invalid');
+      msgEl.textContent = result.msg;
+      msgEl.className = 'field-msg error';
+      iconEl.textContent = '\u2717';
+      iconEl.style.color = '#ef4444';
+
+      if (prevValidity[fieldName] !== false && prevValidity[fieldName] !== undefined) {
+        haptic.error();
+        sound.error();
+      }
+    }
+
+    prevValidity[fieldName] = result.valid;
+  });
+});
+
+// ─── Plan selector (selection haptic) ───────
+document.getElementById('plan').addEventListener('change', () => {
+  haptic.selection();
+  sound.click({ pitch: 'high' });
+});
+
+// ─── Slider with snap haptics ───────────────
+const freqSlider = document.getElementById('freqSlider');
+const freqValue = document.getElementById('freqValue');
+let lastSliderSnap = parseInt(freqSlider.value);
+
+freqSlider.addEventListener('input', () => {
+  const val = parseInt(freqSlider.value);
+  freqValue.textContent = val;
+
+  if (val !== lastSliderSnap) {
+    lastSliderSnap = val;
+    haptic.impact('light');
+    sound.tick();
+  }
+});
+
+// ─── Toggle switches ────────────────────────
+document.querySelectorAll('.toggle-switch input').forEach(toggle => {
+  toggle.addEventListener('change', () => {
+    haptic.toggle(toggle.checked);
+    sound.toggle(toggle.checked);
+  });
+});
+
+// ─── Form submission ────────────────────────
+const form = document.getElementById('signupForm');
+const submitBtn = document.getElementById('submitBtn');
+const successScreen = document.getElementById('successScreen');
+
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  // Validate all
+  const nameOk = validators.name(document.getElementById('name').value).valid;
+  const emailOk = validators.email(document.getElementById('email').value).valid;
+  const passOk = validators.password(document.getElementById('password').value).valid;
+  const termsOk = document.getElementById('toggleTerms').checked;
+
+  if (!nameOk || !emailOk || !passOk) {
+    haptic.error();
+    sound.error();
+    visual.shake({ intensity: 4, duration: 300 });
+    return;
+  }
+
+  if (!termsOk) {
+    haptic.warning();
+    sound.chime('E4');
+    return;
+  }
+
+  // Disable button, show loading
+  submitBtn.disabled = true;
+  submitBtn.textContent = 'Creating...';
+
+  // Simulate network delay
+  await new Promise(r => setTimeout(r, 1200));
+
+  // Celebration!
+  haptic.success();
+  sound.success();
+  visual.glow({ color: 'rgba(16, 185, 129, 0.4)', duration: 600, size: 20 });
+
+  // Brief pause then second stronger celebration
+  setTimeout(() => {
+    haptic.play([
+      { type: 'vibrate', duration: 30, intensity: 0.5 },
+      { type: 'pause', duration: 60, intensity: 0 },
+      { type: 'vibrate', duration: 40, intensity: 0.7 },
+      { type: 'pause', duration: 60, intensity: 0 },
+      { type: 'vibrate', duration: 50, intensity: 0.9 },
+    ]);
+    sound.chime('C5');
+  }, 400);
+
+  // Show success
+  form.style.display = 'none';
+  successScreen.classList.add('show');
+});
+
+// ─── Reset ──────────────────────────────────
+document.getElementById('resetBtn').addEventListener('click', () => {
+  form.reset();
+  form.style.display = '';
+  successScreen.classList.remove('show');
+  submitBtn.disabled = false;
+  submitBtn.textContent = 'Create Account';
+
+  document.querySelectorAll('input[data-validate]').forEach(input => {
+    input.classList.remove('valid', 'invalid');
+  });
+  document.querySelectorAll('.field-msg').forEach(el => {
+    el.textContent = '';
+    el.className = 'field-msg';
+  });
+  document.querySelectorAll('.status-icon').forEach(el => {
+    el.textContent = '';
+  });
+
+  Object.keys(prevValidity).forEach(k => delete prevValidity[k]);
+
+  haptic.tap();
+  sound.click({ pitch: 'mid' });
+});
+</script>
+
+</body>
+</html>

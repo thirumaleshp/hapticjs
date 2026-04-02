@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Whack-a-Mole | @hapticjs/core</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: #0a0a14;
+    color: #e0e0e8;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* ─── Header ───────────────────────────────── */
+  .top-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.8rem 1.2rem;
+    background: #0e0e1c;
+    border-bottom: 1px solid #1e1e30;
+  }
+  .top-bar a {
+    color: #7c7caa;
+    text-decoration: none;
+    font-size: 0.85rem;
+  }
+  .top-bar a:hover { color: #a78bfa; }
+  .top-bar h1 {
+    font-size: 1rem;
+    font-weight: 600;
+    background: linear-gradient(90deg, #a855f7, #f59e0b);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* ─── HUD ──────────────────────────────────── */
+  .hud {
+    display: flex;
+    justify-content: space-around;
+    padding: 1rem;
+    gap: 1rem;
+    max-width: 480px;
+    margin: 0 auto;
+    width: 100%;
+  }
+  .hud-item {
+    text-align: center;
+  }
+  .hud-label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #666688;
+  }
+  .hud-value {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #f0f0ff;
+    font-variant-numeric: tabular-nums;
+  }
+  .hud-value.score { color: #a855f7; }
+  .hud-value.time { color: #f59e0b; }
+  .hud-value.combo { color: #34d399; }
+
+  /* ─── Grid ─────────────────────────────────── */
+  .game-area {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    width: 100%;
+    max-width: 360px;
+    aspect-ratio: 1;
+  }
+  .hole {
+    position: relative;
+    background: #14142a;
+    border: 2px solid #22223a;
+    border-radius: 16px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: border-color 0.15s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .hole:active { border-color: #555; }
+
+  .mole {
+    font-size: 2.8rem;
+    opacity: 0;
+    transform: translateY(60%) scale(0.5);
+    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.2s;
+    pointer-events: none;
+    line-height: 1;
+  }
+  .mole.up {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  .mole.hit {
+    opacity: 1;
+    transform: translateY(0) scale(1.3) rotate(15deg);
+    transition: transform 0.12s ease-out, opacity 0.3s 0.1s;
+  }
+
+  .hole.flash-hit {
+    background: rgba(168, 85, 247, 0.15);
+    border-color: #a855f7;
+  }
+  .hole.flash-miss {
+    background: rgba(239, 68, 68, 0.1);
+    border-color: #ef4444;
+  }
+
+  /* ─── Overlay ──────────────────────────────── */
+  .overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.85);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+  .overlay.hidden { display: none; }
+
+  .overlay-content {
+    text-align: center;
+    padding: 2rem;
+  }
+  .overlay-content h2 {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+  }
+  .overlay-content .final-score {
+    font-size: 3rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, #a855f7, #f59e0b);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin: 0.5rem 0 1.5rem;
+  }
+  .btn {
+    display: inline-block;
+    padding: 0.9rem 2.2rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #fff;
+    background: linear-gradient(135deg, #7c3aed, #a855f7);
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+  .btn:hover {
+    transform: scale(1.04);
+    box-shadow: 0 4px 24px rgba(168, 85, 247, 0.35);
+  }
+  .btn:active { transform: scale(0.97); }
+
+  /* ─── Milestone Toast ──────────────────────── */
+  .toast {
+    position: fixed;
+    top: 80px;
+    left: 50%;
+    transform: translateX(-50%) translateY(-20px);
+    background: linear-gradient(135deg, #7c3aed, #a855f7);
+    color: #fff;
+    padding: 0.6rem 1.4rem;
+    border-radius: 30px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    opacity: 0;
+    transition: opacity 0.3s, transform 0.3s;
+    z-index: 200;
+    pointer-events: none;
+  }
+  .toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  <a href="../index.html">&larr; Examples</a>
+  <h1>Whack-a-Mole</h1>
+  <span style="width:80px"></span>
+</div>
+
+<div class="hud">
+  <div class="hud-item">
+    <div class="hud-label">Score</div>
+    <div class="hud-value score" id="score">0</div>
+  </div>
+  <div class="hud-item">
+    <div class="hud-label">Time</div>
+    <div class="hud-value time" id="timer">30</div>
+  </div>
+  <div class="hud-item">
+    <div class="hud-label">Combo</div>
+    <div class="hud-value combo" id="combo">0x</div>
+  </div>
+</div>
+
+<div class="game-area">
+  <div class="grid" id="grid"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- Start Overlay -->
+<div class="overlay" id="startOverlay">
+  <div class="overlay-content">
+    <h2>Whack-a-Mole</h2>
+    <p style="color:#888;margin-bottom:1.5rem;">Tap the moles before they hide!<br>Feel every hit with haptic feedback.</p>
+    <button class="btn" id="startBtn">Start Game</button>
+  </div>
+</div>
+
+<!-- Game Over Overlay -->
+<div class="overlay hidden" id="endOverlay">
+  <div class="overlay-content">
+    <h2>Game Over</h2>
+    <div class="final-score" id="finalScore">0</div>
+    <p style="color:#888;margin-bottom:1.5rem;" id="endMsg">Great game!</p>
+    <button class="btn" id="restartBtn">Play Again</button>
+  </div>
+</div>
+
+<script type="module">
+import { HapticEngine, SoundEngine, bounce, impact, spring } from '../../packages/core/dist/index.js';
+
+// ─── Engines ────────────────────────────────
+const haptic = HapticEngine.create();
+const sound = new SoundEngine({ volume: 0.4 });
+
+// ─── DOM ────────────────────────────────────
+const grid = document.getElementById('grid');
+const scoreEl = document.getElementById('score');
+const timerEl = document.getElementById('timer');
+const comboEl = document.getElementById('combo');
+const toastEl = document.getElementById('toast');
+const startOverlay = document.getElementById('startOverlay');
+const endOverlay = document.getElementById('endOverlay');
+const finalScoreEl = document.getElementById('finalScore');
+const endMsgEl = document.getElementById('endMsg');
+
+// Build 3x3 grid
+const holes = [];
+for (let i = 0; i < 9; i++) {
+  const hole = document.createElement('div');
+  hole.className = 'hole';
+  hole.dataset.index = i;
+
+  const mole = document.createElement('div');
+  mole.className = 'mole';
+  mole.textContent = '\u{1F9AB}';
+  hole.appendChild(mole);
+  grid.appendChild(hole);
+  holes.push({ el: hole, mole, isUp: false, timeout: null });
+}
+
+// ─── Game state ─────────────────────────────
+let score = 0;
+let comboCount = 0;
+let timeLeft = 30;
+let gameInterval = null;
+let moleInterval = null;
+let isRunning = false;
+
+// ─── Milestone tracking ─────────────────────
+const milestones = [10, 25, 50, 100];
+let nextMilestoneIdx = 0;
+
+function showToast(msg) {
+  toastEl.textContent = msg;
+  toastEl.classList.add('show');
+  setTimeout(() => toastEl.classList.remove('show'), 1500);
+}
+
+// ─── Mole logic ─────────────────────────────
+function popMole() {
+  if (!isRunning) return;
+
+  // Pick a random hole that isn't already up
+  const down = holes.filter(h => !h.isUp);
+  if (down.length === 0) return;
+
+  const hole = down[Math.floor(Math.random() * down.length)];
+  hole.isUp = true;
+  hole.mole.classList.add('up');
+
+  // Play bounce physics pattern for the pop animation (fire-and-forget)
+  haptic.play(bounce({ height: 0.6, bounciness: 0.5, bounces: 2 }));
+
+  // Duration mole stays up: gets shorter as time runs out
+  const upTime = Math.max(600, 1400 - (30 - timeLeft) * 25);
+
+  hole.timeout = setTimeout(() => {
+    if (hole.isUp) {
+      hole.isUp = false;
+      hole.mole.classList.remove('up');
+      hole.mole.classList.remove('hit');
+      // Missed mole resets combo
+      comboCount = 0;
+      comboEl.textContent = '0x';
+    }
+  }, upTime);
+}
+
+function startMoles() {
+  // Spawn moles at varying intervals
+  const spawn = () => {
+    if (!isRunning) return;
+    popMole();
+    // Occasionally pop two at once
+    if (Math.random() < 0.3 + (30 - timeLeft) * 0.015) {
+      setTimeout(popMole, 100);
+    }
+    const delay = Math.max(300, 900 - (30 - timeLeft) * 15);
+    moleInterval = setTimeout(spawn, delay);
+  };
+  spawn();
+}
+
+// ─── Tap handler ────────────────────────────
+grid.addEventListener('pointerdown', async (e) => {
+  if (!isRunning) return;
+
+  const holeEl = e.target.closest('.hole');
+  if (!holeEl) return;
+
+  const idx = parseInt(holeEl.dataset.index);
+  const hole = holes[idx];
+
+  if (hole.isUp) {
+    // HIT!
+    hole.isUp = false;
+    clearTimeout(hole.timeout);
+    hole.mole.classList.remove('up');
+    hole.mole.classList.add('hit');
+
+    comboCount++;
+    const multiplier = Math.min(comboCount, 5);
+    const points = 1 * multiplier;
+    score += points;
+
+    scoreEl.textContent = score;
+    comboEl.textContent = comboCount + 'x';
+
+    // Impact haptic + sound
+    const style = comboCount >= 3 ? 'heavy' : comboCount >= 2 ? 'medium' : 'light';
+    haptic.impact(style);
+    sound.pop();
+
+    // Visual flash on hole
+    holeEl.classList.add('flash-hit');
+    setTimeout(() => {
+      holeEl.classList.remove('flash-hit');
+      hole.mole.classList.remove('hit');
+    }, 250);
+
+    // Check milestones
+    if (nextMilestoneIdx < milestones.length && score >= milestones[nextMilestoneIdx]) {
+      const ms = milestones[nextMilestoneIdx];
+      nextMilestoneIdx++;
+      showToast(ms + ' points!');
+      haptic.success();
+      sound.success();
+    }
+  } else {
+    // MISS
+    comboCount = 0;
+    comboEl.textContent = '0x';
+
+    haptic.error();
+    sound.error();
+
+    holeEl.classList.add('flash-miss');
+    setTimeout(() => holeEl.classList.remove('flash-miss'), 200);
+  }
+});
+
+// ─── Game lifecycle ─────────────────────────
+function startGame() {
+  score = 0;
+  comboCount = 0;
+  timeLeft = 30;
+  nextMilestoneIdx = 0;
+  isRunning = true;
+
+  scoreEl.textContent = '0';
+  timerEl.textContent = '30';
+  comboEl.textContent = '0x';
+
+  startOverlay.classList.add('hidden');
+  endOverlay.classList.add('hidden');
+
+  // Reset all moles
+  holes.forEach(h => {
+    h.isUp = false;
+    h.mole.classList.remove('up', 'hit');
+    clearTimeout(h.timeout);
+  });
+
+  haptic.tap();
+  sound.click({ pitch: 'high' });
+
+  // Timer
+  gameInterval = setInterval(() => {
+    timeLeft--;
+    timerEl.textContent = timeLeft;
+
+    if (timeLeft <= 5) {
+      timerEl.style.color = '#ef4444';
+    }
+
+    if (timeLeft <= 0) {
+      endGame();
+    }
+  }, 1000);
+
+  startMoles();
+}
+
+function endGame() {
+  isRunning = false;
+  clearInterval(gameInterval);
+  clearTimeout(moleInterval);
+
+  // Hide all moles
+  holes.forEach(h => {
+    h.isUp = false;
+    h.mole.classList.remove('up', 'hit');
+    clearTimeout(h.timeout);
+  });
+
+  timerEl.style.color = '#f59e0b';
+
+  // Warning haptic pattern
+  haptic.warning();
+  sound.chime('E4');
+
+  // Show end screen
+  finalScoreEl.textContent = score;
+  if (score >= 100) {
+    endMsgEl.textContent = 'Incredible reflexes!';
+  } else if (score >= 50) {
+    endMsgEl.textContent = 'Great game!';
+  } else if (score >= 25) {
+    endMsgEl.textContent = 'Not bad, keep practicing!';
+  } else {
+    endMsgEl.textContent = 'Better luck next time!';
+  }
+
+  setTimeout(() => {
+    endOverlay.classList.remove('hidden');
+  }, 500);
+}
+
+// ─── Button handlers ────────────────────────
+document.getElementById('startBtn').addEventListener('click', () => {
+  startGame();
+});
+
+document.getElementById('restartBtn').addEventListener('click', () => {
+  startGame();
+});
+</script>
+
+</body>
+</html>

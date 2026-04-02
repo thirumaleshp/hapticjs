@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>@hapticjs/core Examples</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: #0a0a0f;
+    color: #e0e0e8;
+    min-height: 100vh;
+  }
+
+  header {
+    text-align: center;
+    padding: 3rem 1.5rem 2rem;
+    background: linear-gradient(135deg, #0d0d1a 0%, #1a1a2e 100%);
+    border-bottom: 1px solid #2a2a40;
+  }
+
+  header h1 {
+    font-size: 2.2rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, #a78bfa, #60a5fa, #34d399);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 0.5rem;
+  }
+
+  header p {
+    color: #8888aa;
+    font-size: 1.1rem;
+    max-width: 480px;
+    margin: 0 auto;
+  }
+
+  .gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 2rem;
+    padding: 2.5rem 1.5rem;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .card {
+    background: #12121e;
+    border: 1px solid #2a2a40;
+    border-radius: 16px;
+    overflow: hidden;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    cursor: pointer;
+    text-decoration: none;
+    color: inherit;
+    display: block;
+  }
+
+  .card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(100, 100, 255, 0.12);
+    border-color: #4a4a70;
+  }
+
+  .card-thumb {
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card-thumb::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    opacity: 0.15;
+  }
+
+  .thumb-game {
+    background: linear-gradient(135deg, #1a0a2e, #2d1b4e);
+  }
+  .thumb-game::after {
+    background: radial-gradient(circle at 30% 40%, #a855f7 0%, transparent 50%),
+                radial-gradient(circle at 70% 60%, #f59e0b 0%, transparent 50%);
+  }
+
+  .thumb-form {
+    background: linear-gradient(135deg, #0a1e2e, #1b2e4e);
+  }
+  .thumb-form::after {
+    background: radial-gradient(circle at 50% 50%, #3b82f6 0%, transparent 50%);
+  }
+
+  .thumb-music {
+    background: linear-gradient(135deg, #1a0a1e, #2e1b2e);
+  }
+  .thumb-music::after {
+    background: radial-gradient(circle at 40% 50%, #ec4899 0%, transparent 40%),
+                radial-gradient(circle at 60% 50%, #06b6d4 0%, transparent 40%);
+  }
+
+  .card-body {
+    padding: 1.5rem;
+  }
+
+  .card-body h2 {
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: #f0f0ff;
+  }
+
+  .card-body p {
+    color: #8888aa;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    margin-bottom: 1rem;
+  }
+
+  .card-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  .tag {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.6rem;
+    border-radius: 20px;
+    background: #1e1e30;
+    color: #aaaacc;
+    border: 1px solid #2e2e48;
+  }
+
+  .arrow {
+    display: inline-block;
+    margin-left: 0.3rem;
+    transition: transform 0.2s ease;
+  }
+
+  .card:hover .arrow {
+    transform: translateX(4px);
+  }
+
+  footer {
+    text-align: center;
+    padding: 2rem 1.5rem;
+    color: #555570;
+    font-size: 0.85rem;
+    border-top: 1px solid #1e1e30;
+  }
+
+  footer a {
+    color: #7c7caa;
+    text-decoration: none;
+  }
+
+  footer a:hover {
+    color: #a78bfa;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>@hapticjs/core Examples</h1>
+  <p>Real-world demo apps showcasing haptic, sound, and visual feedback in action.</p>
+</header>
+
+<main class="gallery">
+
+  <a href="haptic-game/index.html" class="card">
+    <div class="card-thumb thumb-game">
+      <span>&#127922;</span>
+    </div>
+    <div class="card-body">
+      <h2>Whack-a-Mole <span class="arrow">&#8594;</span></h2>
+      <p>A mobile-friendly arcade game with haptic impact feedback on hits, error feedback on misses, and physics-based mole animations. Milestone celebrations included.</p>
+      <div class="card-tags">
+        <span class="tag">HapticEngine</span>
+        <span class="tag">SoundEngine</span>
+        <span class="tag">Physics</span>
+        <span class="tag">Game</span>
+      </div>
+    </div>
+  </a>
+
+  <a href="haptic-form/index.html" class="card">
+    <div class="card-thumb thumb-form">
+      <span>&#128221;</span>
+    </div>
+    <div class="card-body">
+      <h2>Haptic Form <span class="arrow">&#8594;</span></h2>
+      <p>A modern signup form with real-time haptic validation, toggle switches, snap sliders, and intensity profile selection. Every interaction gives tactile feedback.</p>
+      <div class="card-tags">
+        <span class="tag">SensoryEngine</span>
+        <span class="tag">Profiles</span>
+        <span class="tag">Validation</span>
+        <span class="tag">UI</span>
+      </div>
+    </div>
+  </a>
+
+  <a href="music-visualizer/index.html" class="card">
+    <div class="card-thumb thumb-music">
+      <span>&#127925;</span>
+    </div>
+    <div class="card-body">
+      <h2>Music Visualizer <span class="arrow">&#8594;</span></h2>
+      <p>A rhythm-synced haptic visualizer with BPM control, tap tempo, beat-reactive visuals, emotion presets, and sound tones playing on every beat. Neon themed.</p>
+      <div class="card-tags">
+        <span class="tag">RhythmSync</span>
+        <span class="tag">SoundEngine</span>
+        <span class="tag">VisualEngine</span>
+        <span class="tag">Emotions</span>
+      </div>
+    </div>
+  </a>
+
+</main>
+
+<footer>
+  <p>Built with <a href="https://github.com/nicholasgriffintn/hapticjs">@hapticjs/core</a></p>
+</footer>
+
+</body>
+</html>

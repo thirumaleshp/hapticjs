@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Music Visualizer | @hapticjs/core</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: #050510;
+    color: #e0e0f0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+
+  /* ─── Header ───────────────────────────────── */
+  .top-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.8rem 1.2rem;
+    background: rgba(10, 10, 25, 0.9);
+    border-bottom: 1px solid #1a1a35;
+    z-index: 10;
+  }
+  .top-bar a {
+    color: #7c7caa;
+    text-decoration: none;
+    font-size: 0.85rem;
+  }
+  .top-bar a:hover { color: #ec4899; }
+  .top-bar h1 {
+    font-size: 1rem;
+    font-weight: 600;
+    background: linear-gradient(90deg, #ec4899, #06b6d4);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* ─── Visualizer ───────────────────────────── */
+  .viz-area {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem;
+    position: relative;
+    min-height: 360px;
+  }
+
+  /* Pulsing circles */
+  .pulse-ring {
+    position: absolute;
+    border-radius: 50%;
+    border: 2px solid var(--accent, #ec4899);
+    opacity: 0;
+    pointer-events: none;
+    transition: none;
+  }
+  .pulse-ring.beat {
+    animation: ringPulse 0.6s ease-out forwards;
+  }
+  @keyframes ringPulse {
+    0% { transform: scale(0.5); opacity: 0.8; }
+    100% { transform: scale(2.5); opacity: 0; }
+  }
+
+  /* Beat dot */
+  .beat-dot {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: var(--accent, #ec4899);
+    box-shadow: 0 0 30px var(--accent, #ec4899), 0 0 60px var(--accent-dim, rgba(236,72,153,0.3));
+    transition: transform 0.08s ease-out, box-shadow 0.08s;
+    z-index: 5;
+  }
+  .beat-dot.hit {
+    transform: scale(1.4);
+    box-shadow: 0 0 50px var(--accent, #ec4899), 0 0 100px var(--accent-dim, rgba(236,72,153,0.5));
+  }
+
+  /* Beat counter */
+  .beat-counter {
+    margin-top: 1.5rem;
+    font-size: 3rem;
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+    color: #fff;
+    opacity: 0.3;
+    z-index: 5;
+  }
+
+  /* Bars visualizer */
+  .bars {
+    display: flex;
+    gap: 4px;
+    align-items: flex-end;
+    height: 60px;
+    margin-top: 1.5rem;
+    z-index: 5;
+  }
+  .bar {
+    width: 8px;
+    background: var(--accent, #ec4899);
+    border-radius: 4px 4px 0 0;
+    transition: height 0.08s ease-out;
+    opacity: 0.6;
+  }
+
+  /* ─── Controls ─────────────────────────────── */
+  .controls {
+    padding: 1.5rem;
+    background: rgba(10, 10, 25, 0.95);
+    border-top: 1px solid #1a1a35;
+  }
+
+  .ctrl-section {
+    max-width: 480px;
+    margin: 0 auto;
+  }
+
+  .ctrl-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+  .ctrl-label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #666;
+    min-width: 50px;
+  }
+  .ctrl-value {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--accent, #ec4899);
+    min-width: 60px;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+
+  input[type="range"] {
+    flex: 1;
+    height: 4px;
+    -webkit-appearance: none;
+    appearance: none;
+    background: #1e1e35;
+    border-radius: 2px;
+    outline: none;
+    cursor: pointer;
+  }
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 18px;
+    height: 18px;
+    background: var(--accent, #ec4899);
+    border-radius: 50%;
+    box-shadow: 0 0 8px var(--accent-dim, rgba(236,72,153,0.4));
+  }
+
+  /* Buttons row */
+  .btn-row {
+    display: flex;
+    gap: 0.6rem;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+  }
+  .btn-ctrl {
+    padding: 0.6rem 1.3rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    border: 1px solid #2a2a45;
+    border-radius: 10px;
+    background: #12122a;
+    color: #ccc;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: inherit;
+  }
+  .btn-ctrl:hover {
+    border-color: var(--accent, #ec4899);
+    color: var(--accent, #ec4899);
+  }
+  .btn-ctrl.active {
+    background: var(--accent, #ec4899);
+    color: #fff;
+    border-color: var(--accent, #ec4899);
+  }
+  .btn-ctrl.tap-btn {
+    min-width: 100px;
+  }
+  .btn-ctrl.tap-btn:active {
+    transform: scale(0.95);
+    background: var(--accent, #ec4899);
+    color: #fff;
+  }
+
+  /* Emotion presets */
+  .emotion-row {
+    display: flex;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+  }
+  .emotion-chip {
+    padding: 0.35rem 0.8rem;
+    font-size: 0.78rem;
+    border-radius: 20px;
+    border: 1px solid #2a2a45;
+    background: #0e0e22;
+    color: #888;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: inherit;
+  }
+  .emotion-chip.active {
+    background: var(--accent, #ec4899);
+    color: #fff;
+    border-color: var(--accent, #ec4899);
+  }
+  .emotion-chip:hover:not(.active) {
+    border-color: var(--accent, #ec4899);
+    color: #ccc;
+  }
+
+  .section-label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #555;
+    margin-bottom: 0.5rem;
+  }
+  .mb { margin-bottom: 1rem; }
+
+  /* Background glow */
+  .bg-glow {
+    position: fixed;
+    top: 40%;
+    left: 50%;
+    width: 300px;
+    height: 300px;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    background: var(--accent-dim, rgba(236,72,153,0.08));
+    filter: blur(80px);
+    pointer-events: none;
+    z-index: 0;
+    transition: background 0.5s;
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-glow" id="bgGlow"></div>
+
+<div class="top-bar">
+  <a href="../index.html">&larr; Examples</a>
+  <h1>Music Visualizer</h1>
+  <span style="width:80px"></span>
+</div>
+
+<div class="viz-area" id="vizArea">
+  <!-- Pulse rings (created dynamically) -->
+  <div class="beat-dot" id="beatDot"></div>
+  <div class="beat-counter" id="beatCounter">0</div>
+  <div class="bars" id="bars"></div>
+</div>
+
+<div class="controls">
+  <div class="ctrl-section">
+
+    <!-- Play / Tap -->
+    <div class="btn-row">
+      <button class="btn-ctrl" id="playBtn">&#9654; Play</button>
+      <button class="btn-ctrl" id="stopBtn">&#9632; Stop</button>
+      <button class="btn-ctrl tap-btn" id="tapBtn">Tap Tempo</button>
+    </div>
+
+    <!-- BPM slider -->
+    <div class="ctrl-row">
+      <span class="ctrl-label">BPM</span>
+      <input type="range" id="bpmSlider" min="60" max="240" value="120">
+      <span class="ctrl-value" id="bpmValue">120</span>
+    </div>
+
+    <!-- Volume slider -->
+    <div class="ctrl-row mb">
+      <span class="ctrl-label">Volume</span>
+      <input type="range" id="volSlider" min="0" max="100" value="40">
+      <span class="ctrl-value" id="volValue">40%</span>
+    </div>
+
+    <!-- Haptic effect selector -->
+    <div class="section-label">Haptic Effect</div>
+    <div class="btn-row mb">
+      <button class="btn-ctrl active" data-effect="tap">Tap</button>
+      <button class="btn-ctrl" data-effect="impact">Impact</button>
+      <button class="btn-ctrl" data-effect="doubleTap">Double</button>
+      <button class="btn-ctrl" data-effect="selection">Tick</button>
+    </div>
+
+    <!-- Emotion presets -->
+    <div class="section-label">Mood / Emotion</div>
+    <div class="emotion-row" id="emotionRow">
+      <button class="emotion-chip active" data-emotion="none">None</button>
+      <button class="emotion-chip" data-emotion="excited">Excited</button>
+      <button class="emotion-chip" data-emotion="calm">Calm</button>
+      <button class="emotion-chip" data-emotion="happy">Happy</button>
+      <button class="emotion-chip" data-emotion="tense">Tense</button>
+      <button class="emotion-chip" data-emotion="playful">Playful</button>
+      <button class="emotion-chip" data-emotion="confident">Confident</button>
+      <button class="emotion-chip" data-emotion="romantic">Romantic</button>
+    </div>
+
+  </div>
+</div>
+
+<script type="module">
+import {
+  HapticEngine,
+  SoundEngine,
+  VisualEngine,
+  RhythmSync,
+  emotions,
+} from '../../packages/core/dist/index.js';
+
+// ─── Engines ────────────────────────────────
+const haptic = HapticEngine.create();
+const sound = new SoundEngine({ volume: 0.4 });
+const visual = new VisualEngine({ enabled: true });
+const rhythm = new RhythmSync({ bpm: 120, intensity: 0.7 });
+
+// Sync haptic to rhythm
+rhythm.syncHaptic(haptic, 'tap');
+
+// ─── Color themes per emotion ───────────────
+const emotionColors = {
+  none:      { accent: '#ec4899', dim: 'rgba(236,72,153,0.15)' },
+  excited:   { accent: '#f59e0b', dim: 'rgba(245,158,11,0.15)' },
+  calm:      { accent: '#06b6d4', dim: 'rgba(6,182,212,0.15)' },
+  happy:     { accent: '#34d399', dim: 'rgba(52,211,153,0.15)' },
+  tense:     { accent: '#ef4444', dim: 'rgba(239,68,68,0.15)' },
+  playful:   { accent: '#a855f7', dim: 'rgba(168,85,247,0.15)' },
+  confident: { accent: '#3b82f6', dim: 'rgba(59,130,246,0.15)' },
+  romantic:  { accent: '#f472b6', dim: 'rgba(244,114,182,0.15)' },
+};
+
+// Tones per emotion
+const emotionTones = {
+  none:      { freq: 440, wave: 'sine' },
+  excited:   { freq: 880, wave: 'square' },
+  calm:      { freq: 261, wave: 'sine' },
+  happy:     { freq: 523, wave: 'sine' },
+  tense:     { freq: 330, wave: 'sawtooth' },
+  playful:   { freq: 660, wave: 'triangle' },
+  confident: { freq: 392, wave: 'sine' },
+  romantic:  { freq: 349, wave: 'sine' },
+};
+
+let currentEmotion = 'none';
+let currentEffect = 'tap';
+
+// ─── DOM refs ───────────────────────────────
+const beatDot = document.getElementById('beatDot');
+const beatCounter = document.getElementById('beatCounter');
+const barsContainer = document.getElementById('bars');
+const vizArea = document.getElementById('vizArea');
+const bgGlow = document.getElementById('bgGlow');
+
+const playBtn = document.getElementById('playBtn');
+const stopBtn = document.getElementById('stopBtn');
+const tapBtn = document.getElementById('tapBtn');
+const bpmSlider = document.getElementById('bpmSlider');
+const bpmValue = document.getElementById('bpmValue');
+const volSlider = document.getElementById('volSlider');
+const volValue = document.getElementById('volValue');
+
+// ─── Build bars ─────────────────────────────
+const NUM_BARS = 16;
+const barEls = [];
+for (let i = 0; i < NUM_BARS; i++) {
+  const bar = document.createElement('div');
+  bar.className = 'bar';
+  bar.style.height = '4px';
+  barsContainer.appendChild(bar);
+  barEls.push(bar);
+}
+
+function setAccentColor(emotion) {
+  const colors = emotionColors[emotion] || emotionColors.none;
+  document.documentElement.style.setProperty('--accent', colors.accent);
+  document.documentElement.style.setProperty('--accent-dim', colors.dim);
+  bgGlow.style.background = colors.dim;
+}
+
+setAccentColor('none');
+
+// ─── Beat callback ──────────────────────────
+rhythm.onBeat((beat) => {
+  beatCounter.textContent = beat;
+
+  // Visual: dot pulse
+  beatDot.classList.add('hit');
+  setTimeout(() => beatDot.classList.remove('hit'), 100);
+
+  // Visual: pulse ring
+  const ring = document.createElement('div');
+  ring.className = 'pulse-ring';
+  const dotRect = beatDot.getBoundingClientRect();
+  const areaRect = vizArea.getBoundingClientRect();
+  ring.style.width = '80px';
+  ring.style.height = '80px';
+  ring.style.left = (dotRect.left - areaRect.left + 40 - 40) + 'px';
+  ring.style.top = (dotRect.top - areaRect.top + 40 - 40) + 'px';
+  vizArea.appendChild(ring);
+  ring.classList.add('beat');
+  setTimeout(() => ring.remove(), 700);
+
+  // Visual: flash on strong beats (every 4th)
+  if (beat % 4 === 1) {
+    visual.flash({ color: emotionColors[currentEmotion]?.accent || '#ec4899', duration: 80, opacity: 0.06 });
+  }
+
+  // Sound: play a tone
+  const tone = emotionTones[currentEmotion] || emotionTones.none;
+  // Alternate octaves on beat
+  const freq = beat % 2 === 0 ? tone.freq : tone.freq * 1.5;
+  sound.playTone(freq, 60, { waveform: tone.wave, volume: 0.2, decay: true });
+
+  // If emotion is selected, play its haptic pattern on every 4th beat
+  if (currentEmotion !== 'none' && beat % 4 === 1) {
+    const pattern = emotions[currentEmotion];
+    if (pattern) {
+      haptic.play(pattern);
+    }
+  }
+
+  // Animate bars
+  animateBars();
+});
+
+function animateBars() {
+  barEls.forEach((bar, i) => {
+    const h = Math.random() * 50 + 10;
+    bar.style.height = h + 'px';
+    bar.style.opacity = (0.4 + Math.random() * 0.6).toString();
+  });
+  // Decay bars
+  setTimeout(() => {
+    barEls.forEach(bar => {
+      bar.style.height = (4 + Math.random() * 8) + 'px';
+      bar.style.opacity = '0.3';
+    });
+  }, 150);
+}
+
+// ─── Play / Stop ────────────────────────────
+playBtn.addEventListener('click', () => {
+  if (rhythm.isPlaying) return;
+  rhythm.start();
+  playBtn.classList.add('active');
+  stopBtn.classList.remove('active');
+  haptic.tap();
+  sound.click({ pitch: 'high' });
+});
+
+stopBtn.addEventListener('click', () => {
+  rhythm.stop();
+  playBtn.classList.remove('active');
+  beatCounter.textContent = '0';
+  haptic.tap();
+  sound.click({ pitch: 'low' });
+  // Reset bars
+  barEls.forEach(bar => { bar.style.height = '4px'; bar.style.opacity = '0.3'; });
+});
+
+// ─── Tap Tempo ──────────────────────────────
+tapBtn.addEventListener('click', () => {
+  const bpm = rhythm.tapTempo();
+  bpmSlider.value = bpm;
+  bpmValue.textContent = bpm;
+
+  haptic.impact('light');
+  sound.tick();
+});
+
+// ─── BPM slider ─────────────────────────────
+bpmSlider.addEventListener('input', () => {
+  const bpm = parseInt(bpmSlider.value);
+  bpmValue.textContent = bpm;
+  rhythm.setBPM(bpm);
+});
+
+// ─── Volume slider ──────────────────────────
+volSlider.addEventListener('input', () => {
+  const vol = parseInt(volSlider.value);
+  volValue.textContent = vol + '%';
+  sound.setVolume(vol / 100);
+});
+
+// ─── Haptic effect selector ─────────────────
+document.querySelectorAll('[data-effect]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('[data-effect]').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+
+    currentEffect = btn.dataset.effect;
+    rhythm.syncHaptic(haptic, currentEffect);
+
+    haptic[currentEffect]?.();
+    sound.click({ pitch: 'mid' });
+  });
+});
+
+// ─── Emotion presets ────────────────────────
+document.querySelectorAll('[data-emotion]').forEach(chip => {
+  chip.addEventListener('click', () => {
+    document.querySelectorAll('[data-emotion]').forEach(c => c.classList.remove('active'));
+    chip.classList.add('active');
+
+    currentEmotion = chip.dataset.emotion;
+    setAccentColor(currentEmotion);
+
+    // Play a preview of the emotion pattern
+    if (currentEmotion !== 'none' && emotions[currentEmotion]) {
+      haptic.play(emotions[currentEmotion]);
+      const tone = emotionTones[currentEmotion];
+      sound.playTone(tone.freq, 100, { waveform: tone.wave, volume: 0.15, decay: true });
+    } else {
+      haptic.tap();
+      sound.click({ pitch: 'mid' });
+    }
+  });
+});
+</script>
+
+</body>
+</html>
