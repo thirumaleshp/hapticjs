@@ -1,6 +1,6 @@
 {
   "name": "@hapticjs/gamepad",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "Gamepad haptics adapter for Feelback — dual motor support",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -18,7 +18,10 @@
       }
     }
   },
-  "files": ["dist", "README.md"],
+  "files": [
+    "dist",
+    "README.md"
+  ],
   "sideEffects": false,
   "scripts": {
     "build": "tsup",
@@ -32,7 +35,17 @@
   "devDependencies": {
     "@hapticjs/core": "workspace:*"
   },
-  "keywords": ["haptics", "gamepad", "controller", "vibration", "rumble", "dual-motor"],
-  "repository": {"type": "git", "url": "https://github.com/thirumaleshp/Feelback.git"},
+  "keywords": [
+    "haptics",
+    "gamepad",
+    "controller",
+    "vibration",
+    "rumble",
+    "dual-motor"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/thirumaleshp/Feelback.git"
+  },
   "license": "MIT"
 }
