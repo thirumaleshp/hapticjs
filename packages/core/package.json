@@ -1,6 +1,6 @@
 {
   "name": "@hapticjs/core",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "Universal Haptics Engine — feel the web",
   "type": "module",
   "main": "./dist/index.cjs",
