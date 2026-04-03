@@ -1,0 +1,143 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#6366f1"/>
+      <stop offset="100%" stop-color="#8b5cf6"/>
+    </linearGradient>
+    <linearGradient id="gradV" x1="0%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%" stop-color="#6366f1"/>
+      <stop offset="100%" stop-color="#8b5cf6"/>
+    </linearGradient>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a"/>
+      <stop offset="50%" stop-color="#131c33"/>
+      <stop offset="100%" stop-color="#1e293b"/>
+    </linearGradient>
+    <linearGradient id="accentLine" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#6366f1" stop-opacity="0"/>
+      <stop offset="50%" stop-color="#8b5cf6" stop-opacity="0.6"/>
+      <stop offset="100%" stop-color="#6366f1" stop-opacity="0"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="4" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <filter id="softGlow">
+      <feGaussianBlur stdDeviation="20" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bgGrad)"/>
+
+  <!-- Background decorative elements -->
+  <!-- Large glow orbs -->
+  <circle cx="300" cy="315" r="250" fill="#6366f1" opacity="0.03" filter="url(#softGlow)"/>
+  <circle cx="900" cy="315" r="200" fill="#8b5cf6" opacity="0.03" filter="url(#softGlow)"/>
+
+  <!-- Subtle dot grid -->
+  <g opacity="0.04" fill="white">
+    <circle cx="100" cy="100" r="1.5"/><circle cx="200" cy="100" r="1.5"/><circle cx="300" cy="100" r="1.5"/>
+    <circle cx="400" cy="100" r="1.5"/><circle cx="500" cy="100" r="1.5"/><circle cx="600" cy="100" r="1.5"/>
+    <circle cx="700" cy="100" r="1.5"/><circle cx="800" cy="100" r="1.5"/><circle cx="900" cy="100" r="1.5"/>
+    <circle cx="1000" cy="100" r="1.5"/><circle cx="1100" cy="100" r="1.5"/>
+    <circle cx="100" cy="200" r="1.5"/><circle cx="200" cy="200" r="1.5"/><circle cx="300" cy="200" r="1.5"/>
+    <circle cx="400" cy="200" r="1.5"/><circle cx="500" cy="200" r="1.5"/><circle cx="600" cy="200" r="1.5"/>
+    <circle cx="700" cy="200" r="1.5"/><circle cx="800" cy="200" r="1.5"/><circle cx="900" cy="200" r="1.5"/>
+    <circle cx="1000" cy="200" r="1.5"/><circle cx="1100" cy="200" r="1.5"/>
+    <circle cx="100" cy="300" r="1.5"/><circle cx="200" cy="300" r="1.5"/><circle cx="300" cy="300" r="1.5"/>
+    <circle cx="400" cy="300" r="1.5"/><circle cx="500" cy="300" r="1.5"/><circle cx="600" cy="300" r="1.5"/>
+    <circle cx="700" cy="300" r="1.5"/><circle cx="800" cy="300" r="1.5"/><circle cx="900" cy="300" r="1.5"/>
+    <circle cx="1000" cy="300" r="1.5"/><circle cx="1100" cy="300" r="1.5"/>
+    <circle cx="100" cy="400" r="1.5"/><circle cx="200" cy="400" r="1.5"/><circle cx="300" cy="400" r="1.5"/>
+    <circle cx="400" cy="400" r="1.5"/><circle cx="500" cy="400" r="1.5"/><circle cx="600" cy="400" r="1.5"/>
+    <circle cx="700" cy="400" r="1.5"/><circle cx="800" cy="400" r="1.5"/><circle cx="900" cy="400" r="1.5"/>
+    <circle cx="1000" cy="400" r="1.5"/><circle cx="1100" cy="400" r="1.5"/>
+    <circle cx="100" cy="500" r="1.5"/><circle cx="200" cy="500" r="1.5"/><circle cx="300" cy="500" r="1.5"/>
+    <circle cx="400" cy="500" r="1.5"/><circle cx="500" cy="500" r="1.5"/><circle cx="600" cy="500" r="1.5"/>
+    <circle cx="700" cy="500" r="1.5"/><circle cx="800" cy="500" r="1.5"/><circle cx="900" cy="500" r="1.5"/>
+    <circle cx="1000" cy="500" r="1.5"/><circle cx="1100" cy="500" r="1.5"/>
+  </g>
+
+  <!-- Top accent line -->
+  <rect x="0" y="0" width="1200" height="3" fill="url(#grad)"/>
+
+  <!-- Logo: vibration wave icon (from icon.svg) -->
+  <g transform="translate(505, 75) scale(0.9)">
+    <!-- Center circle -->
+    <circle cx="45" cy="45" r="12" fill="url(#grad)"/>
+    <!-- Inner wave arcs -->
+    <path d="M20 45c0-13.8 11.2-25 25-25" stroke="url(#grad)" stroke-width="4" stroke-linecap="round" fill="none" opacity="0.8"/>
+    <path d="M70 45c0 13.8-11.2 25-25 25" stroke="url(#grad)" stroke-width="4" stroke-linecap="round" fill="none" opacity="0.8"/>
+    <!-- Outer wave arcs -->
+    <path d="M8 45c0-20.4 16.6-37 37-37" stroke="url(#grad)" stroke-width="4" stroke-linecap="round" fill="none" opacity="0.5"/>
+    <path d="M82 45c0 20.4-16.6 37-37 37" stroke="url(#grad)" stroke-width="4" stroke-linecap="round" fill="none" opacity="0.5"/>
+    <!-- Outermost wave arcs -->
+    <path d="M-2 45c0-26 21-47 47-47" stroke="url(#grad)" stroke-width="3" stroke-linecap="round" fill="none" opacity="0.3"/>
+    <path d="M92 45c0 26-21 47-47 47" stroke="url(#grad)" stroke-width="3" stroke-linecap="round" fill="none" opacity="0.3"/>
+  </g>
+
+  <!-- Brand name -->
+  <text x="600" y="210" text-anchor="middle" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="56" font-weight="700" fill="url(#grad)">haptic.js</text>
+
+  <!-- Tagline -->
+  <text x="600" y="252" text-anchor="middle" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="22" fill="#94a3b8" font-weight="400">The universal haptics engine for JavaScript</text>
+
+  <!-- Divider line -->
+  <rect x="350" y="278" width="500" height="1" fill="url(#accentLine)"/>
+
+  <!-- HPL pattern display -->
+  <rect x="340" y="305" width="520" height="55" rx="10" fill="#1e293b" stroke="#334155" stroke-width="1"/>
+  <text x="600" y="340" text-anchor="middle" font-family="'SF Mono', 'Fira Code', 'Cascadia Code', Consolas, monospace" font-size="26">
+    <tspan fill="#34d399">~~</tspan><tspan fill="#475569">..</tspan><tspan fill="#facc15">##</tspan><tspan fill="#475569">..</tspan><tspan fill="#f472b6">@@</tspan>
+  </text>
+
+  <!-- Waveform visualization -->
+  <!-- baseline at y=480 -->
+
+  <!-- ~~ light bars -->
+  <rect x="370" y="445" width="22" height="35" rx="4" fill="url(#gradV)" opacity="0.85"/>
+  <rect x="398" y="450" width="22" height="30" rx="4" fill="url(#gradV)" opacity="0.8"/>
+
+  <!-- .. pause -->
+  <rect x="432" y="472" width="22" height="8" rx="4" fill="#334155" opacity="0.4"/>
+  <rect x="460" y="472" width="22" height="8" rx="4" fill="#334155" opacity="0.4"/>
+
+  <!-- ## medium bars -->
+  <rect x="500" y="420" width="22" height="60" rx="4" fill="url(#gradV)" opacity="0.95"/>
+  <rect x="528" y="425" width="22" height="55" rx="4" fill="url(#gradV)" opacity="0.9"/>
+
+  <!-- .. pause -->
+  <rect x="562" y="472" width="22" height="8" rx="4" fill="#334155" opacity="0.4"/>
+  <rect x="590" y="472" width="22" height="8" rx="4" fill="#334155" opacity="0.4"/>
+
+  <!-- @@ heavy bars -->
+  <rect x="630" y="385" width="22" height="95" rx="4" fill="url(#gradV)" filter="url(#glow)"/>
+  <rect x="658" y="390" width="22" height="90" rx="4" fill="url(#gradV)" filter="url(#glow)"/>
+
+  <!-- Waveform baseline -->
+  <line x1="355" y1="480" x2="695" y2="480" stroke="#334155" stroke-width="1" opacity="0.5"/>
+
+  <!-- Intensity labels -->
+  <g font-family="'SF Mono', Consolas, monospace" font-size="11" fill="#475569">
+    <text x="405" y="500" text-anchor="middle">light</text>
+    <text x="519" y="500" text-anchor="middle">medium</text>
+    <text x="649" y="500" text-anchor="middle">heavy</text>
+  </g>
+
+  <!-- npm badge area -->
+  <rect x="470" y="540" width="260" height="34" rx="17" fill="#1e293b" stroke="#334155" stroke-width="1"/>
+  <text x="600" y="562" text-anchor="middle" font-family="'SF Mono', Consolas, monospace" font-size="14" fill="#94a3b8">
+    npm install <tspan fill="#8b5cf6">@hapticjs/core</tspan>
+  </text>
+
+  <!-- Bottom accent line -->
+  <rect x="0" y="627" width="1200" height="3" fill="url(#grad)"/>
+</svg>
