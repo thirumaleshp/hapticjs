@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 120" fill="none">
+  <defs>
+    <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#6366f1"/>
+      <stop offset="100%" stop-color="#8b5cf6"/>
+    </linearGradient>
+  </defs>
+  <!-- Vibration wave icon -->
+  <g transform="translate(20, 15)">
+    <!-- Center circle -->
+    <circle cx="45" cy="45" r="12" fill="url(#g)"/>
+    <!-- Inner wave arcs -->
+    <path d="M20 45c0-13.8 11.2-25 25-25" stroke="url(#g)" stroke-width="4" stroke-linecap="round" fill="none" opacity="0.8"/>
+    <path d="M70 45c0 13.8-11.2 25-25 25" stroke="url(#g)" stroke-width="4" stroke-linecap="round" fill="none" opacity="0.8"/>
+    <!-- Outer wave arcs -->
+    <path d="M8 45c0-20.4 16.6-37 37-37" stroke="url(#g)" stroke-width="4" stroke-linecap="round" fill="none" opacity="0.5"/>
+    <path d="M82 45c0 20.4-16.6 37-37 37" stroke="url(#g)" stroke-width="4" stroke-linecap="round" fill="none" opacity="0.5"/>
+    <!-- Outermost wave arcs -->
+    <path d="M-2 45c0-26 21-47 47-47" stroke="url(#g)" stroke-width="3" stroke-linecap="round" fill="none" opacity="0.3"/>
+    <path d="M92 45c0 26-21 47-47 47" stroke="url(#g)" stroke-width="3" stroke-linecap="round" fill="none" opacity="0.3"/>
+  </g>
+  <!-- Text -->
+  <text x="140" y="72" font-family="system-ui, -apple-system, sans-serif" font-size="48" font-weight="700" fill="url(#g)">haptic.js</text>
+</svg>

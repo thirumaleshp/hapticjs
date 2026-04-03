@@ -1,14 +1,19 @@
 <div align="center">
 
-# @hapticjs
+<img src="assets/logo.svg" alt="haptic.js" width="360" />
 
-**Universal Haptics Engine for JavaScript & TypeScript**
+<br/>
 
-[![npm](https://img.shields.io/npm/v/@hapticjs/core?label=core&color=blue)](https://www.npmjs.com/org/hapticjs)
-[![license](https://img.shields.io/badge/license-MIT-green)](https://github.com/thirumaleshp/hapticjs/blob/main/LICENSE)
-![bundle size](https://img.shields.io/badge/bundle-<3KB-brightgreen)
-![presets](https://img.shields.io/badge/presets-55%2B-blueviolet)
-![tests](https://img.shields.io/badge/tests-228%2B-success)
+**The universal haptics engine for JavaScript & TypeScript**
+
+[![npm version](https://img.shields.io/npm/v/@hapticjs/core?style=flat-square&color=6366f1)](https://www.npmjs.com/package/@hapticjs/core)
+[![CI](https://img.shields.io/github/actions/workflow/status/thirumaleshp/hapticjs/ci.yml?style=flat-square&label=CI)](https://github.com/thirumaleshp/hapticjs/actions)
+[![license](https://img.shields.io/npm/l/@hapticjs/core?style=flat-square)](https://github.com/thirumaleshp/hapticjs/blob/main/LICENSE)
+[![bundle size](https://img.shields.io/bundlephobia/minzip/@hapticjs/core?style=flat-square&label=size)](https://bundlephobia.com/package/@hapticjs/core)
+[![downloads](https://img.shields.io/npm/dm/@hapticjs/core?style=flat-square)](https://www.npmjs.com/package/@hapticjs/core)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-3178c6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+
+[**Playground**](https://thirumaleshp.github.io/hapticjs/) &bull; [**Documentation**](https://thirumaleshp.github.io/hapticjs/docs/) &bull; [**Gallery**](https://thirumaleshp.github.io/hapticjs/gallery/) &bull; [**Examples**](https://thirumaleshp.github.io/hapticjs/examples/)
 
 </div>
 
@@ -30,6 +35,20 @@ haptic.play('~~..##..@@');
 
 That's it. Three lines to add haptic feedback to any web app.
 
+### CDN Usage
+
+No build step required — use directly in the browser:
+
+```html
+<script src="https://unpkg.com/@hapticjs/core"></script>
+<script>
+  const haptic = new HapticJS.HapticEngine();
+  haptic.tap();
+  haptic.success();
+  haptic.play('~~..##..@@');
+</script>
+```
+
 ---
 
 ## Why @hapticjs?
@@ -37,7 +56,7 @@ That's it. Three lines to add haptic feedback to any web app.
 - **One API everywhere** -- Web Vibration API, Gamepad rumble, React Native, iOS audio
 - **Semantic effects** -- `tap()`, `success()`, `error()` map to the best native equivalent
 - **Haptic Pattern Language (HPL)** -- Describe complex patterns as strings: `~~..##..@@`
-- **55+ built-in presets** -- UI, notifications, gaming, accessibility, system, emotions
+- **63+ built-in presets** -- UI, notifications, gaming, accessibility, system, emotions
 - **Sound engine** -- Procedural audio feedback via Web Audio API
 - **Visual effects** -- CSS-based flash, shake, ripple, glow, bounce, jello, rubber
 - **Physics patterns** -- Spring, bounce, friction, wave, gravity, elastic, pendulum

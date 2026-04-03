@@ -1,4 +1,4 @@
-name: Deploy Playground
+name: Deploy Site
 
 on:
   push:
@@ -32,16 +32,26 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      - name: Build core package
-        run: pnpm build --filter @hapticjs/core
+      - name: Build all packages
+        run: pnpm build
 
-      - name: Build playground
-        run: cd apps/playground && npx vite build
+      - name: Assemble site
+        run: |
+          mkdir -p _site
+          # Playground → root
+          cp -r apps/playground/dist/* _site/
+          # Docs → /docs/
+          cp -r apps/docs/.vitepress/dist _site/docs
+          # Gallery → /gallery/
+          cp -r apps/gallery/dist _site/gallery
+          # Examples → /examples/
+          mkdir -p _site/examples
+          cp -r apps/examples/* _site/examples/
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: apps/playground/dist
+          path: _site
 
   deploy:
     environment:

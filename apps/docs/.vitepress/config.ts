@@ -4,6 +4,7 @@ export default defineConfig({
   title: '@hapticjs',
   description: 'Universal Haptics Engine for JavaScript & TypeScript',
   lang: 'en-US',
+  base: '/hapticjs/docs/',
 
   head: [
     ['meta', { name: 'theme-color', content: '#3b82f6' }],
