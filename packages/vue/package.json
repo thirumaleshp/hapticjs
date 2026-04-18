@@ -34,7 +34,7 @@
     "vue": "^3.5.0",
     "@hapticjs/core": "workspace:*"
   },
-  "keywords": ["haptics", "vue", "composables", "directives", "vibration"],
+  "keywords": ["haptic", "haptics", "tap", "vue", "composables", "directives", "vibration"],
   "repository": {"type": "git", "url": "https://github.com/thirumaleshp/Feelback.git"},
   "license": "MIT"
 }

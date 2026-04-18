@@ -31,7 +31,9 @@
     "@hapticjs/core": "workspace:*"
   },
   "keywords": [
+    "haptic",
     "haptics",
+    "tap",
     "web-components",
     "custom-elements",
     "vibration",

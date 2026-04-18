@@ -44,7 +44,9 @@
     "bench": "npx tsx benchmarks/index.ts"
   },
   "keywords": [
+    "haptic",
     "haptics",
+    "tap",
     "vibration",
     "tactile",
     "feedback",

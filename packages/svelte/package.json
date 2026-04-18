@@ -34,7 +34,7 @@
     "svelte": "^5.0.0",
     "@hapticjs/core": "workspace:*"
   },
-  "keywords": ["haptics", "svelte", "actions", "vibration"],
+  "keywords": ["haptic", "haptics", "tap", "svelte", "actions", "vibration"],
   "repository": {"type": "git", "url": "https://github.com/thirumaleshp/Feelback.git"},
   "license": "MIT"
 }

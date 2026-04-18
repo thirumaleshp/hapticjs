@@ -35,7 +35,9 @@
     "@hapticjs/core": "workspace:*"
   },
   "keywords": [
+    "haptic",
     "haptics",
+    "tap",
     "angular",
     "service",
     "vibration",
